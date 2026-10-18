@@ -166,9 +166,7 @@ onMounted(() => {
   color: var(--text-secondary);
   font-size: 0.92rem;
   font-weight: 500;
-  transition:
-    color 0.2s ease,
-    background-color 0.2s ease;
+  transition: var(--transition-hover);
 }
 
 .nav-link:hover {
@@ -199,13 +197,20 @@ onMounted(() => {
   background: var(--bg-elevated);
   color: var(--text-secondary);
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: var(--btn-transition);
 }
 
 .theme-btn:hover,
 .mobile-toggle:hover {
   color: var(--accent-primary);
   border-color: var(--accent-primary);
+  transform: var(--btn-hover-transform);
+}
+
+.theme-btn:active,
+.mobile-toggle:active {
+  transform: var(--btn-active-transform);
+  transition-duration: 0.12s;
 }
 
 .nav-cta {

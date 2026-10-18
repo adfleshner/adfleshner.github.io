@@ -2,10 +2,12 @@
 import { RouterView } from 'vue-router'
 import NavBar from '@/components/NavBar.vue'
 import FooterBar from '@/components/FooterBar.vue'
+import CodeCanvasBackground from '@/components/CodeCanvasBackground.vue'
 </script>
 
 <template>
   <div class="app-shell">
+    <CodeCanvasBackground />
     <NavBar />
 
     <main class="main-content">
@@ -25,10 +27,14 @@ import FooterBar from '@/components/FooterBar.vue'
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  position: relative;
+  z-index: 1;
 }
 
 .main-content {
   flex: 1;
+  position: relative;
+  z-index: 1;
 }
 </style>
 

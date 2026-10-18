@@ -1,3 +1,5 @@
+import profilePhoto from '@/assets/profile.jpg'
+
 export interface SocialLink {
   label: string
   url: string
@@ -46,7 +48,9 @@ export const profile = {
   name: 'Aaron Fleshner',
   firstName: 'Aaron',
   initials: 'AF',
-  avatarUrl: 'https://avatars.githubusercontent.com/u/3021508?v=4',
+  avatarUrl: profilePhoto,
+  linkedInAvatarUrl:
+    'https://media.licdn.com/dms/image/v2/D4E03AQElP_4IZx3h5w/profile-displayphoto-shrink_400_400/profile-displayphoto-shrink_400_400/0/1731644311614?e=1793836800&v=beta&t=q8yomDBEd4QcnU-I-TKS8dsWySUH9Wz8K7KjCFrrk9Y',
   role: 'Lead Software Engineer',
   roleFocus: 'Android Focus',
   headline: 'I build thoughtful, reliable Android apps.',
@@ -206,7 +210,7 @@ export const projects: ProjectItem[] = [
     tagline: 'Text decoding and algorithmic data transformation engine',
     description:
       'A fast, clean Kotlin-based text decoder and manipulation tool built for processing custom encoding patterns and cipher transformations.',
-    category: 'Systems & Tools',
+    category: 'Android',
     featured: true,
     technologies: ['Kotlin', 'Algorithms', 'Command Line', 'Unit Testing'],
     repoUrl: 'https://github.com/adfleshner/Hyerplex2'
