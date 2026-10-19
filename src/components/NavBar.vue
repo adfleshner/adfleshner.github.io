@@ -2,6 +2,8 @@
 import { ref, onMounted } from 'vue'
 import { RouterLink } from 'vue-router'
 import { profile } from '@/data/portfolio'
+import logoDark from '@/assets/logos/logo-dark.jpg'
+import logoLight from '@/assets/logos/logo-light.jpg'
 
 const isLight = ref(false)
 const mobileMenuOpen = ref(false)
@@ -15,6 +17,14 @@ const navItems = [
 
 function applyTheme(light: boolean) {
   document.documentElement.setAttribute('data-theme', light ? 'light' : 'dark')
+  const themeColor = light ? '#f6f5f1' : '#0b0f19'
+  let metaTheme = document.querySelector('meta[name="theme-color"]:not([media])')
+  if (!metaTheme) {
+    metaTheme = document.createElement('meta')
+    metaTheme.setAttribute('name', 'theme-color')
+    document.head.appendChild(metaTheme)
+  }
+  metaTheme.setAttribute('content', themeColor)
 }
 
 function toggleTheme() {
@@ -28,10 +38,19 @@ function closeMobileMenu() {
 }
 
 onMounted(() => {
-  const saved = localStorage.getItem('theme-preference')
-  if (saved === 'light') {
+  const currentAttr = document.documentElement.getAttribute('data-theme')
+  if (currentAttr === 'light') {
     isLight.value = true
     applyTheme(true)
+  } else {
+    const saved = localStorage.getItem('theme-preference')
+    if (saved === 'light') {
+      isLight.value = true
+      applyTheme(true)
+    } else {
+      isLight.value = false
+      applyTheme(false)
+    }
   }
 })
 </script>
@@ -40,7 +59,10 @@ onMounted(() => {
   <header class="navbar-wrapper">
     <div class="container navbar">
       <RouterLink to="/" class="brand" @click="closeMobileMenu">
-        <span class="brand-badge">{{ profile.initials }}</span>
+        <div class="brand-logo-container">
+          <img :src="logoDark" alt="Aaron Fleshner Logo" class="brand-logo logo-dark" width="34" height="34" />
+          <img :src="logoLight" alt="Aaron Fleshner Logo" class="brand-logo logo-light" width="34" height="34" />
+        </div>
         <span class="brand-name">{{ profile.name }}</span>
       </RouterLink>
 
@@ -80,7 +102,10 @@ onMounted(() => {
         </button>
 
         <RouterLink to="/contact" class="btn btn-primary nav-cta">
-          Let's Talk
+          <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+          </svg>
+          <span>Let's Talk</span>
         </RouterLink>
 
         <button
@@ -120,6 +145,7 @@ onMounted(() => {
   position: sticky;
   top: 0;
   z-index: 50;
+  width: 100%;
   background: var(--bg-glass);
   backdrop-filter: blur(16px);
   border-bottom: 1px solid var(--border-subtle);
@@ -130,6 +156,7 @@ onMounted(() => {
   align-items: center;
   justify-content: space-between;
   height: 70px;
+  width: 100%;
 }
 
 .brand {
@@ -138,20 +165,58 @@ onMounted(() => {
   gap: 0.7rem;
   font-weight: 700;
   font-size: 1.05rem;
+  min-width: 0;
 }
 
-.brand-badge {
+.brand-logo-container {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 34px;
-  height: 34px;
+  width: 36px;
+  height: 36px;
   border-radius: 10px;
-  background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
-  color: #fff;
-  font-family: var(--font-mono);
-  font-size: 0.85rem;
-  font-weight: 700;
+  overflow: hidden;
+  flex-shrink: 0;
+  border: 1px solid var(--border-subtle);
+  background: var(--bg-elevated);
+  transition: transform var(--transition-hover), border-color var(--transition-hover);
+}
+
+.brand:hover .brand-logo-container {
+  transform: translateY(-1.5px);
+  border-color: var(--accent-primary);
+}
+
+.brand-logo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.logo-dark {
+  display: block;
+}
+
+.logo-light {
+  display: none;
+}
+
+:root[data-theme='light'] .logo-dark {
+  display: none;
+}
+
+:root[data-theme='light'] .logo-light {
+  display: block;
+}
+
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme='dark']) .logo-dark {
+    display: none;
+  }
+  :root:not([data-theme='dark']) .logo-light {
+    display: block;
+  }
 }
 
 .nav-links {
@@ -183,6 +248,7 @@ onMounted(() => {
   display: flex;
   align-items: center;
   gap: 0.65rem;
+  flex-shrink: 0;
 }
 
 .theme-btn,
@@ -254,6 +320,20 @@ onMounted(() => {
 
   .mobile-drawer {
     display: flex;
+  }
+}
+
+@media (max-width: 380px) {
+  .brand-name {
+    font-size: 0.92rem;
+  }
+
+  .brand {
+    gap: 0.5rem;
+  }
+
+  .nav-actions {
+    gap: 0.45rem;
   }
 }
 </style>

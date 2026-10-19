@@ -28,7 +28,7 @@ const filteredProjects = computed(() => {
 </script>
 
 <template>
-  <div class="container section">
+  <div class="container page-wrapper">
     <div class="section-header">
       <span class="eyebrow">Portfolio</span>
       <h1 class="section-title">Projects &amp; Case Studies</h1>
@@ -75,7 +75,11 @@ const filteredProjects = computed(() => {
         class="btn btn-outline"
         @click="activeCategory = 'All'; searchQuery = ''"
       >
-        Reset Filters
+        <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="1 4 1 10 7 10" />
+          <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10" />
+        </svg>
+        <span>Reset Filters</span>
       </button>
     </div>
   </div>
@@ -129,7 +133,9 @@ const filteredProjects = computed(() => {
   border: 1px solid var(--border-subtle);
   background: var(--bg-elevated);
   color: var(--text-primary);
-  min-width: 240px;
+  min-width: 0;
+  width: 100%;
+  max-width: 320px;
   outline: none;
   transition: border-color 0.2s ease;
 }
@@ -140,8 +146,24 @@ const filteredProjects = computed(() => {
 
 .projects-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   gap: 1.5rem;
+}
+
+@media (max-width: 640px) {
+  .controls-bar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .search-input {
+    max-width: 100%;
+  }
+
+  .projects-grid {
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+  }
 }
 
 .empty-state {

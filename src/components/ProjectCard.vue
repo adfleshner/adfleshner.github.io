@@ -49,7 +49,11 @@ defineProps<{
           rel="noopener noreferrer"
           class="project-link"
         >
-          Source Code ↗
+          <svg class="project-link-icon" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="16 18 22 12 16 6" />
+            <polyline points="8 6 2 12 8 18" />
+          </svg>
+          <span>Source Code</span> ↗
         </a>
         <a
           v-if="project.liveUrl"
@@ -58,7 +62,12 @@ defineProps<{
           rel="noopener noreferrer"
           class="project-link"
         >
-          Live Demo ↗
+          <svg class="project-link-icon" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10" />
+            <line x1="2" y1="12" x2="22" y2="12" />
+            <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
+          </svg>
+          <span>Live Demo</span> ↗
         </a>
       </div>
     </div>
@@ -136,17 +145,31 @@ defineProps<{
 .project-links {
   display: flex;
   align-items: center;
-  gap: 1.25rem;
+  flex-wrap: wrap;
+  gap: 0.75rem 1.25rem;
 }
 
 .project-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
   font-size: 0.88rem;
   font-weight: 600;
   color: var(--text-primary);
   transition: color 0.2s ease;
 }
 
+.project-link-icon {
+  flex-shrink: 0;
+  color: var(--text-muted);
+  transition: color 0.2s ease;
+}
+
 .project-link:hover {
+  color: var(--accent-primary);
+}
+
+.project-link:hover .project-link-icon {
   color: var(--accent-primary);
 }
 

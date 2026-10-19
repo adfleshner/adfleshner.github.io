@@ -1,32 +1,46 @@
 <script setup lang="ts">
 import { profile, experiences, education, skillGroups } from '@/data/portfolio'
-
-function printResume() {
-  window.print()
-}
 </script>
 
 <template>
-  <div class="container section">
+  <div class="container page-wrapper">
     <!-- Bio Header -->
     <div class="about-top">
       <div class="section-header">
         <span class="eyebrow">About &amp; Resume</span>
         <h1 class="section-title">{{ profile.name }}</h1>
-        <p class="about-role">
-          <span>{{ profile.role }}</span>
-          <span v-if="profile.roleFocus" class="role-focus-badge">
-            <span class="focus-dot" />
-            {{ profile.roleFocus }}
+        <div class="about-role">
+          <span class="role-line">
+            <span>{{ profile.role }}</span>
+            <span v-if="profile.roleFocus" class="role-focus-badge">
+              <span class="focus-dot" />
+              {{ profile.roleFocus }}
+            </span>
           </span>
           <span class="about-sep">•</span>
           <span>{{ profile.location }}</span>
-        </p>
+        </div>
       </div>
 
-      <button type="button" class="btn btn-outline" @click="printResume">
-        Print / Save PDF
-      </button>
+      <div class="about-actions">
+        <a
+          :href="profile.resumeUrl"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="btn btn-primary resume-download-btn"
+        >
+          <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+            <polyline points="7 10 12 15 17 10" />
+            <line x1="12" y1="15" x2="12" y2="3" />
+          </svg>
+          <span>Download Resume (PDF)</span>
+          <svg class="btn-icon btn-icon-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="7" y1="17" x2="17" y2="7" />
+            <polyline points="7 7 17 7 17 17" />
+          </svg>
+        </a>
+      </div>
     </div>
 
     <div class="card bio-card">
@@ -51,12 +65,14 @@ function printResume() {
           <div class="timeline-header">
             <div>
               <h3 class="timeline-role">
-                <span>{{ item.role }}</span>
-                <span v-if="item.roleFocus" class="role-focus-badge">
-                  <span class="focus-dot" />
-                  {{ item.roleFocus }}
+                <span class="role-title-text">{{ item.role }}</span>
+                <span class="role-badges">
+                  <span v-if="item.roleFocus" class="role-focus-badge">
+                    <span class="focus-dot" />
+                    {{ item.roleFocus }}
+                  </span>
+                  <span v-if="item.current" class="current-badge">Current</span>
                 </span>
-                <span v-if="item.current" class="current-badge">Current</span>
               </h3>
               <p class="timeline-company">{{ item.company }} • {{ item.location }}</p>
             </div>
@@ -121,7 +137,24 @@ function printResume() {
   align-items: flex-start;
   justify-content: space-between;
   flex-wrap: wrap;
-  gap: 1rem;
+  gap: 1.25rem;
+  margin-bottom: 2.25rem;
+}
+
+.about-top .section-header {
+  margin-bottom: 0;
+}
+
+.about-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  margin-left: auto;
+  flex-wrap: wrap;
+}
+
+.resume-download-btn {
+  white-space: nowrap;
 }
 
 .about-role {
@@ -131,7 +164,14 @@ function printResume() {
   display: flex;
   align-items: center;
   flex-wrap: wrap;
-  gap: 0.6rem;
+  gap: 0.5rem 0.65rem;
+}
+
+.role-line {
+  display: inline-flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
 }
 
 .about-sep {
@@ -142,6 +182,8 @@ function printResume() {
   display: inline-flex;
   align-items: center;
   gap: 0.4rem;
+  white-space: nowrap;
+  flex-shrink: 0;
   font-family: var(--font-mono);
   font-size: 0.78rem;
   font-weight: 600;
@@ -210,10 +252,22 @@ function printResume() {
   font-weight: 700;
   display: flex;
   align-items: center;
-  gap: 0.65rem;
+  flex-wrap: wrap;
+  gap: 0.5rem 0.65rem;
+}
+
+.role-badges {
+  display: inline-flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.45rem;
 }
 
 .current-badge {
+  display: inline-flex;
+  align-items: center;
+  white-space: nowrap;
+  flex-shrink: 0;
   font-family: var(--font-mono);
   font-size: 0.72rem;
   padding: 0.18rem 0.55rem;
@@ -251,8 +305,15 @@ function printResume() {
 
 .two-col-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-  gap: 2.5rem;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
+}
+
+@media (max-width: 640px) {
+  .two-col-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
 }
 
 .edu-card {

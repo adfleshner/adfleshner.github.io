@@ -107,7 +107,7 @@ async function copyEmail() {
 </script>
 
 <template>
-  <div class="container section">
+  <div class="container page-wrapper">
     <div class="section-header">
       <span class="eyebrow">Contact</span>
       <h1 class="section-title">Get in Touch</h1>
@@ -131,7 +131,14 @@ async function copyEmail() {
               <a :href="`mailto:${profile.email}`" class="channel-value">{{ profile.email }}</a>
             </div>
             <button type="button" class="btn btn-outline copy-btn" @click="copyEmail">
-              {{ copiedEmail ? 'Copied!' : 'Copy' }}
+              <svg v-if="copiedEmail" class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="20 6 9 17 4 12" />
+              </svg>
+              <svg v-else class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
+                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+              </svg>
+              <span>{{ copiedEmail ? 'Copied!' : 'Copy' }}</span>
             </button>
           </div>
 
@@ -145,7 +152,7 @@ async function copyEmail() {
               class="social-row"
             >
               <span class="social-name">{{ social.label }}</span>
-              <span class="social-handle">{{ social.handle }} ↗</span>
+              <span class="social-arrow">↗</span>
             </a>
           </div>
         </div>
@@ -162,7 +169,11 @@ async function copyEmail() {
             </a>.
           </p>
           <button type="button" class="btn btn-outline" @click="resetForm">
-            Send Another Message
+            <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="1 4 1 10 7 10" />
+              <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10" />
+            </svg>
+            <span>Send Another Message</span>
           </button>
         </div>
 
@@ -227,8 +238,19 @@ async function copyEmail() {
           </label>
 
           <button type="submit" class="btn btn-primary submit-btn" :disabled="isSending">
-            <span v-if="isSending">Sending...</span>
-            <span v-else>Send Message →</span>
+            <svg v-if="isSending" class="btn-icon btn-spin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10" stroke-opacity="0.25" />
+              <path d="M12 2a10 10 0 0 1 10 10" />
+            </svg>
+            <svg v-else class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="22" y1="2" x2="11" y2="13" />
+              <polygon points="22 2 15 22 11 13 2 9 22 2" />
+            </svg>
+            <span>{{ isSending ? 'Sending...' : 'Send Message' }}</span>
+            <svg v-if="!isSending" class="btn-icon btn-icon-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="5" y1="12" x2="19" y2="12" />
+              <polyline points="12 5 19 12 12 19" />
+            </svg>
           </button>
         </form>
       </div>
@@ -269,6 +291,7 @@ async function copyEmail() {
   border-radius: var(--radius-sm);
   background: var(--bg-secondary);
   border: 1px solid var(--border-subtle);
+  min-width: 0;
 }
 
 .channel-label {
@@ -282,6 +305,19 @@ async function copyEmail() {
 .channel-value {
   font-weight: 600;
   color: var(--accent-primary);
+  word-break: break-all;
+}
+
+@media (max-width: 480px) {
+  .email-box {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+
+  .copy-btn {
+    align-self: flex-end;
+  }
 }
 
 .copy-btn {
@@ -314,10 +350,15 @@ async function copyEmail() {
   font-size: 0.92rem;
 }
 
-.social-handle {
-  font-family: var(--font-mono);
-  font-size: 0.82rem;
-  color: var(--text-secondary);
+.social-arrow {
+  font-size: 0.95rem;
+  color: var(--text-muted);
+  transition: transform var(--transition-hover), color var(--transition-hover);
+}
+
+.social-row:hover .social-arrow {
+  color: var(--accent-primary);
+  transform: translate(2px, -2px);
 }
 
 .contact-form {
