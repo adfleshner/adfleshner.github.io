@@ -18,32 +18,26 @@ const canvasRef = ref<HTMLCanvasElement | null>(null)
 const CONFIG = {
   // 1. 🌊 Physics & Elasticity (Controls how the highlight eases and tracks the cursor)
   physics: {
-    /** Pull strength of primary highlight towards cursor.
-     *  Lower (e.g. 0.018 - 0.022) = slower, softer ease-in glide.
-     *  Higher (e.g. 0.06 - 0.10) = snappy, immediate response.
-     */
-    springTension: 0.020,
-    /** Elastic friction for primary highlight (0.85 - 0.90 = smooth deceleration without abrupt stops) */
-    springDamping: 0.88,
-    /** Secondary trailing ripple tension (drifts behind with extra liquid lag) */
-    trailTension: 0.012,
+    /** Pull strength of primary highlight towards cursor (Dreamy Nebula preset) */
+    springTension: 0.018,
+    /** Elastic friction for primary highlight (slow, celestial glide) */
+    springDamping: 0.92,
+    /** Secondary trailing ripple tension (viscous trailing wake) */
+    trailTension: 0.009,
     /** Secondary trailing ripple damping */
-    trailDamping: 0.85
+    trailDamping: 0.90
   },
 
   // 2. ✨ Highlight Bloom & Ease-In Curve
   highlight: {
-    /** How gradually the highlight blooms / eases into view.
-     *  Lower (e.g. 0.025 - 0.035) = slow, gradual cinematic ease-in.
-     *  Higher (e.g. 0.15) = immediate pop-in.
-     */
-    easeInSpeed: 0.032,
+    /** How gradually the highlight blooms / eases into view (gradual, soft bloom) */
+    easeInSpeed: 0.026,
     /** How gradually the highlight fades out when the cursor leaves */
     easeOutSpeed: 0.020,
-    /** Radius of illumination in pixels around cursor */
-    radius: 140,
-    /** Falloff sharpness curve: 1 = linear, 2.2 = soft smooth feather, 3 = focused point */
-    falloffExponent: 2.2,
+    /** Radius of illumination in pixels around cursor (broad, soft celestial feathering) */
+    radius: 180,
+    /** Falloff sharpness curve (1.5 = soft celestial falloff) */
+    falloffExponent: 1.5,
     /** Strength of secondary trailing fluid glow relative to primary (0 = off, 1 = equal) */
     trailIntensity: 0.45,
     /** Minimum threshold before a character starts glowing */

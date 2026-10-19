@@ -41,7 +41,7 @@ import { profile } from '@/data/portfolio'
 
 router.afterEach((to) => {
   const pageTitle = to.meta.title as string | undefined
-  document.title = pageTitle ? `${pageTitle} — ${profile.name}` : `${profile.name} — Portfolio`
+  document.title = pageTitle ? `${pageTitle} — ${profile.name} Portfolio` : `${profile.name} Portfolio`
 })
 
 export default router

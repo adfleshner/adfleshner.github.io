@@ -1,4 +1,5 @@
 import profilePhoto from '@/assets/profile.jpg'
+import portraitBwPhoto from '@/assets/photos/aaron-portrait-bw.jpg'
 
 export interface SocialLink {
   label: string
@@ -37,10 +38,12 @@ export interface ProjectItem {
   featured: boolean
   technologies: string[]
   liveUrl?: string
+  liveLabel?: string
   repoUrl?: string
   articleUrl?: string
   articleLabel?: string
   metrics?: string
+  current?: boolean
 }
 
 export const profile = {
@@ -48,12 +51,13 @@ export const profile = {
   firstName: 'Aaron',
   initials: 'AF',
   avatarUrl: profilePhoto,
+  avatarBw: portraitBwPhoto,
   role: 'Lead Software Engineer',
   roleFocus: 'Android Focus',
   headline: 'I build thoughtful, reliable Android apps.',
   subheadline:
-    'Lead Software Engineer (Android Focus) based in Durham, NC.',
-  location: 'Durham, NC',
+    'Lead Software Engineer (Android Focus).',
+  location: 'NC, USA',
   email: 'adfleshner@gmail.com',
   resumeUrl: '/resume.pdf',
   availableForWork: false,
@@ -248,11 +252,86 @@ export const projects: ProjectItem[] = [
     repoUrl: 'https://github.com/adfleshner/AthenaHealthNameGetter'
   },
   {
+    id: 'dt-ignite',
+    title: 'DT Ignite',
+    tagline: 'Frictionless on-device app discovery, dynamic delivery, and lifecycle monetization.',
+    description:
+      'On-device software platform embedded at carrier and OEM firmware level across hundreds of millions of Android devices, letting operators, manufacturers and developers deliver, manage and update apps over the air without traditional app-store funnels. Includes the Ignite Services SDK for background installs, app metadata checks and conversion telemetry.',
+    category: 'Android',
+    featured: true,
+    current: true,
+    technologies: ['Android SDK', 'Kotlin', 'Java', 'AIDL / IPC', 'OTA App Delivery', 'SDK Architecture'],
+    liveUrl: 'https://www.digitalturbine.com/',
+    liveLabel: 'Project Page',
+    metrics: 'DT · Current'
+  },
+  {
+    id: 'diving-dd-calculator',
+    title: 'Diving DD Calculator',
+    tagline: 'Degree-of-difficulty calculator for springboard and platform diving.',
+    description:
+      'A personal Android tool, built by a former Team USA diver, that digitizes degree-of-difficulty (DD) calculation from dive number, body position, twists and board height so divers and coaches can avoid manual lookup errors on competition dive sheets.',
+    category: 'Android',
+    featured: false,
+    technologies: ['Android', 'Java', 'Android SDK', 'DD Formula Logic'],
+    metrics: 'Personal'
+  },
+  {
+    id: 'tcso-app',
+    title: "Tuscaloosa County Sheriff's Office",
+    tagline: 'Official public safety and community alert app for Tuscaloosa County.',
+    description:
+      "Built at the Center for Advanced Public Safety (University of Alabama) with the Tuscaloosa County Sheriff's Office. Lets residents search active warrants, recent arrests and most-wanted listings, view mapped sex offender registries and storm shelters, receive emergency push alerts, and submit anonymous tips.",
+    category: 'Android',
+    featured: true,
+    technologies: ['Android SDK', 'Java', 'Google Maps API', 'REST APIs', 'Push Notifications', 'Location Services'],
+    liveUrl: 'https://play.google.com/store/apps/details?id=edu.ua.caps.tcsopublic&hl=en_US',
+    liveLabel: 'Google Play',
+    metrics: 'CAPS'
+  },
+  {
+    id: 'society',
+    title: 'SOCIETY: Secure Social Network',
+    tagline: 'Decentralized secure messaging and private communities without cloud dependency.',
+    description:
+      "Decentralized communication platform from WhiteStar Communications offering end-to-end encrypted messaging, private and public communities, and peer-to-peer file sharing across mobile and desktop, powered by WhiteStar's proprietary networking protocols and a cross-platform C++ core library. No longer on Google Play.",
+    category: 'Android',
+    featured: true,
+    technologies: ['Kotlin', 'Android SDK', 'C++', 'End-to-End Encryption', 'Peer-to-Peer Architecture'],
+    metrics: 'WhiteStar · Retired'
+  },
+  {
+    id: 'g-fuel',
+    title: 'G FUEL',
+    tagline: 'Official mobile storefront for exclusive G FUEL drops and VIP deals.',
+    description:
+      'Official mobile commerce app for the gaming and esports energy drink brand, with early access to limited-edition collector boxes, app-exclusive flavor drops, VIP promotions and restock alerts, integrated with Shopify for a streamlined shopping and order-tracking experience.',
+    category: 'Android',
+    featured: false,
+    technologies: ['Android SDK', 'Shopify Storefront API', 'Push Notifications (FCM)'],
+    liveUrl: 'https://play.google.com/store/apps/details?id=com.aeron.shopifycore.gfuel&hl=en_US',
+    liveLabel: 'Google Play',
+    metrics: 'GFuel'
+  },
+  {
+    id: 'algotraffic',
+    title: 'ALGO Traffic',
+    tagline: 'Real-time Alabama traffic alerts, live highway cameras, and road conditions.',
+    description:
+      "Alabama's official traveler information app, built at the Center for Advanced Public Safety with ALDOT and ALEA. Delivers real-time incidents, statewide live traffic cameras, construction alerts and digital message sign readouts, plus a hands-free Driving Mode with audible hazard and weather alerts.",
+    category: 'Android',
+    featured: true,
+    technologies: ['Android SDK', 'Java', 'REST APIs', 'Location Services', 'HERE Maps SDK', 'Push Notifications'],
+    liveUrl: 'https://play.google.com/store/apps/details?id=edu.ua.caps.aldotAlgoTraffic&hl=en_US',
+    liveLabel: 'Google Play',
+    metrics: 'CAPS'
+  },
+  {
     id: 'personal-site',
-    title: 'Personal Portfolio & Resume',
+    title: 'Personal Portfolio',
     tagline: 'Modern, accessible Vue 3 + TypeScript portfolio application',
     description:
-      'A responsive single-page portfolio and interactive resume built with Vue 3 (Composition API), Vite 6, TypeScript, Vue Router, and custom CSS design system.',
+      'A responsive single-page portfolio built with Vue 3 (Composition API), Vite 6, TypeScript, Vue Router, and custom CSS design system.',
     category: 'Web & Tools',
     featured: true,
     technologies: ['Vue 3', 'TypeScript', 'Vite', 'Vue Router', 'CSS3'],
@@ -260,3 +339,17 @@ export const projects: ProjectItem[] = [
     metrics: 'Active'
   }
 ]
+
+export const productionAppIds = [
+  'dt-ignite',
+  'algotraffic',
+  'tcso-app',
+  'society',
+  'g-fuel',
+  'diving-dd-calculator'
+] as const
+
+export const productionApps: ProjectItem[] = productionAppIds
+  .map((id) => projects.find((p) => p.id === id))
+  .filter((p): p is ProjectItem => Boolean(p))
+
