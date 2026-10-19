@@ -58,4 +58,23 @@ Based on [Gemini Code Assist Slow in VSCode (Thread #414435357)](https://support
 - Background elements must never bleed into or behind sticky navigation headers. Always offset (`startY: 92px`) or clip (`headerHeight: 70px`) below headers.
 - Keep card backgrounds solid or elevated (`#151e2e` in dark, `#ffffff` in light) to guarantee foreground readability.
 
+## 7. Layout Breathing Room & Typography Flow
+- **Zero awkward wrapping on badges / pills:** Always prevent single-word breaks or squished text wrapping on tags, badges, and status pills (e.g. `white-space: nowrap`, `flex-shrink: 0`).
+- **Graceful component flow & spacing:** Ensure containers, cards, and micro-metric rows have ample breathing room, balanced horizontal/vertical paddings, and never feel cramped or over-dense.
+- **Natural, balanced copy:** Keep subheadings and feature pillar titles concise and rhythmic so phrases read naturally without forced linebreaks.
+
+## 8. Lead Engineer Responsive & Reusable Architecture
+- **Fluid Grids over Rigid Minimums:** Never use column minimums that exceed small mobile viewports (e.g. `minmax(310px, 1fr)` or `320px` breaks on 320px screens). Use fluid caps like `minmax(min(100%, 280px), 1fr)` or collapse cleanly to `1fr` on mobile.
+- **Independent Padding Axes:** Never allow vertical section shorthand (`padding: 4.5rem 0;`) to clobber horizontal container padding (`padding: 0 1.5rem;`). Always isolate `padding-left`/`padding-right` on containers and `padding-top`/`padding-bottom` on sections/wrappers.
+- **Grouped Flex Wrapping:** When pairing titles with badges or bullets, group them in sub-flex containers so they wrap predictably without scattering or leaving orphan punctuation.
+- **Viewport Clipping & Scrollbar Safety:** Apply `overflow-x: clip;` to `html`/`body` to prevent horizontal page scrolling without breaking `position: sticky`. Never use `width: 100vw;` on full-bleed elements (it adds vertical scrollbar width and forces horizontal scrollbars). Use `width: 100%;`.
+
+## 9. Native Dual-Theme Architecture
+- To prevent mobile browsers (like Chrome for Android) from force-darkening or inverting light themes:
+  - Provide `<meta name="color-scheme" content="light dark">` in `<head>`.
+  - Declare `color-scheme: only light;` on `[data-theme='light']` (`only` strictly forbids algorithmic browser inversion).
+  - Synchronize `<meta name="theme-color">` dynamically to match active theme background.
+
+
+
 
