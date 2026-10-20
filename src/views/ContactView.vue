@@ -38,6 +38,7 @@ async function handleSubmit() {
 
   // Check if a Formspree endpoint is configured via VITE_FORMSPREE_ENDPOINT
   const formspreeEndpoint = import.meta.env.VITE_FORMSPREE_ENDPOINT
+  const web3formsKey = import.meta.env.VITE_WEB3FORMS_KEY
 
   if (formspreeEndpoint) {
     try {
@@ -57,6 +58,37 @@ async function handleSubmit() {
       })
 
       if (response.ok) {
+        submitted.value = true
+      } else {
+        openMailClient()
+        submitted.value = true
+      }
+    } catch {
+      openMailClient()
+      submitted.value = true
+    } finally {
+      isSending.value = false
+    }
+  } else if (web3formsKey) {
+    try {
+      const response = await fetch('https://api.web3forms.com/submit', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json'
+        },
+        body: JSON.stringify({
+          access_key: web3formsKey,
+          name: form.name,
+          email: form.email,
+          subject: form.subject,
+          message: form.message,
+          botcheck: form.companyWebsite
+        })
+      })
+
+      const data = await response.json()
+      if (data.success) {
         submitted.value = true
       } else {
         openMailClient()
