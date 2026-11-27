@@ -37,7 +37,7 @@ const career = computed(() => experiences.map((e) => ({ ...e, years: years(e.per
         </h1>
         <p class="hero-lede">
           Twelve years of native Android, from statewide public-safety apps to install bases around the world.
-          Before software, I dived for Team USA.
+          Before software, I dived internationally for Team USA.
         </p>
         <div class="hero-actions">
           <RouterLink to="/projects" class="btn">See the work</RouterLink>
