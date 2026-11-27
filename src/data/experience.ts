@@ -15,7 +15,7 @@ export const experiences: ExperienceItem[] = [
     roleFocus: 'Android Focus',
     company: 'Digital Turbine',
     period: 'March 2024 — Present',
-    location: 'Durham, NC',
+    location: 'NC',
     current: true,
     highlights: [
       'Lead mobile architecture and engineering for Digital Turbine’s core Android SDKs and on-device app distribution platforms.',
@@ -40,7 +40,7 @@ export const experiences: ExperienceItem[] = [
     role: 'Senior Android Engineer',
     company: 'WhiteStar Communications, Inc.',
     period: 'September 2019 — March 2022',
-    location: 'Raleigh-Durham, NC',
+    location: 'NC',
     highlights: [
       'Served as lead designer and developer for the Society Secure Messenger Android app, a decentralized instant messaging platform without cloud dependency.',
       'Collaborated with Desktop and iOS teams to deliver seamless cross-platform communications.',
@@ -52,7 +52,7 @@ export const experiences: ExperienceItem[] = [
     role: 'Android Engineer',
     company: 'Digital Turbine',
     period: 'June 2017 — September 2019',
-    location: 'Durham, NC',
+    location: 'NC',
     highlights: [
       'Engineered core features and UI/UX improvements for Digital Turbine’s Ignite on-device app delivery and monetization platform.',
       'Collaborated with global engineering, product, and QA teams to scale mobile ad delivery and platform capabilities for carrier partners.',
