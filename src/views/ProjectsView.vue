@@ -222,11 +222,9 @@ const filteredApps = computed(() => {
 .tab-indicator {
   position: absolute;
   left: 0;
-  bottom: -3px;
-  height: 6px;
+  bottom: -1px;
+  height: 2px;
   background: var(--accent);
-  -webkit-mask: var(--brush) center / 100% 100% no-repeat;
-  mask: var(--brush) center / 100% 100% no-repeat;
   opacity: 0;
 }
 

@@ -196,11 +196,9 @@ onBeforeUnmount(() => {
   position: absolute;
   left: 0;
   right: 0;
-  bottom: -2px;
-  height: 4px;
+  bottom: 0;
+  height: 1px;
   background: var(--accent);
-  -webkit-mask: var(--brush) center / 100% 100% no-repeat;
-  mask: var(--brush) center / 100% 100% no-repeat;
   transform: scaleX(0);
   transform-origin: left;
   transition: transform var(--dur) var(--ease);

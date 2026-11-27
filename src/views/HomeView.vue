@@ -14,7 +14,7 @@ const current = experiences.find((e) => e.current) ?? experiences[0]
       <div class="hero-text">
         <p class="label">{{ profile.role }} · {{ profile.roleFocus.replace(' Focus', '') }}</p>
         <h1 class="hero-title">
-          I build thoughtful, <em class="brush">reliable</em> Android apps.
+          I build thoughtful, <em>reliable</em> Android apps.
         </h1>
         <p class="hero-lede">
           {{ yearsExperience }} years of native Android, from statewide public-safety apps to install bases around the world.
@@ -83,6 +83,7 @@ const current = experiences.find((e) => e.current) ?? experiences[0]
 
 .hero-title em {
   font-style: italic;
+  color: var(--accent);
 }
 
 .hero-lede {
