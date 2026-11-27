@@ -87,7 +87,7 @@ const filteredApps = computed(() => {
       <p class="label">Work</p>
       <Transition :name="`slide-${direction}`" mode="out-in">
       <div v-if="tab === 'projects'" key="projects">
-        <h1>Shipped apps and <em>open source.</em></h1>
+        <h1>Apps in people’s <em>pockets.</em></h1>
         <p class="lede">From statewide tools to worldwide install bases, plus what I build to learn.</p>
       </div>
       <div v-else key="experience">
