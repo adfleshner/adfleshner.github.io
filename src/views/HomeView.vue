@@ -36,10 +36,8 @@ const career = computed(() => experiences.map((e) => ({ ...e, years: years(e.per
           I build thoughtful, <em>reliable</em> Android apps.
         </h1>
         <p class="hero-lede">
-          Twelve years of native Android, at every scale: from statewide public-safety apps to platforms and
-          storefronts with install bases around the world. Along the way, encrypted messaging, connected
-          fitness, and SDKs built to tight memory and battery budgets. Before software, I dove springboard for
-          Team USA.
+          Twelve years of native Android, from statewide public-safety apps to install bases around the world.
+          Before software, I dived for Team USA.
         </p>
         <div class="hero-actions">
           <RouterLink to="/projects" class="btn">See the work</RouterLink>
