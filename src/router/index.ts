@@ -1,0 +1,52 @@
+import { createRouter, createWebHistory } from 'vue-router'
+import HomeView from '@/views/HomeView.vue'
+
+const router = createRouter({
+  history: createWebHistory(import.meta.env.BASE_URL),
+  scrollBehavior(to, from, savedPosition) {
+    // Switching tabs on the same page (query change only) keeps the scroll position
+    if (to.path === from.path) {
+      return false
+    }
+    if (savedPosition) {
+      return savedPosition
+    }
+    return { top: 0, behavior: 'smooth' }
+  },
+  routes: [
+    {
+      path: '/',
+      name: 'home',
+      component: HomeView,
+      meta: { title: '' }
+    },
+    {
+      path: '/about',
+      name: 'about',
+      component: () => import('@/views/AboutView.vue'),
+      meta: { title: 'About' }
+    },
+    {
+      path: '/projects',
+      name: 'projects',
+      component: () => import('@/views/ProjectsView.vue'),
+      meta: { title: 'Projects' }
+    },
+    {
+      path: '/contact',
+      name: 'contact',
+      component: () => import('@/views/ContactView.vue'),
+      meta: { title: 'Contact' }
+    }
+  ]
+})
+
+import { profile } from '@/data/portfolio'
+
+router.afterEach((to) => {
+  const pageTitle = to.meta.title as string | undefined
+  document.title = pageTitle ? `${pageTitle} · ${profile.name}` : `${profile.name}, Lead Android Engineer`
+})
+
+export default router
+

@@ -1,0 +1,356 @@
+<script setup lang="ts">
+import { ref, computed, watch, nextTick, onMounted, onBeforeUnmount } from 'vue'
+import { projects, productionApps, productionAppIds } from '@/data/portfolio'
+import type { ProjectItem } from '@/data/portfolio'
+import ProjectCard from '@/components/ProjectCard.vue'
+import ExperienceList from '@/components/ExperienceList.vue'
+import { useRoute, useRouter } from 'vue-router'
+import { profile, experiences, careerStartYear } from '@/data/portfolio'
+
+// Two tabs on the Work page. Experience is first and the default; Projects lives at ?tab=projects
+// so either can be linked to.
+type Tab = 'experience' | 'projects'
+const TABS: Tab[] = ['experience', 'projects']
+const route = useRoute()
+const router = useRouter()
+const tab = computed<Tab>(() => (route.query.tab === 'projects' ? 'projects' : 'experience'))
+function selectTab(next: Tab) {
+  router.replace({ query: next === 'experience' ? {} : { tab: next } })
+}
+
+// Slide direction follows tab order: moving right slides content in from the right, and vice versa.
+const direction = ref<'forward' | 'back'>('forward')
+watch(tab, (next, prev) => {
+  direction.value = TABS.indexOf(next) > TABS.indexOf(prev) ? 'forward' : 'back'
+  nextTick(moveIndicator)
+})
+
+// Underline that glides under the active tab
+const tabRefs = ref<Record<Tab, HTMLElement | null>>({ experience: null, projects: null })
+const indicator = ref({ left: 0, width: 0, ready: false })
+function moveIndicator() {
+  const el = tabRefs.value[tab.value]
+  if (!el) return
+  indicator.value = { left: el.offsetLeft, width: el.offsetWidth, ready: true }
+}
+onMounted(() => {
+  moveIndicator()
+  document.fonts?.ready.then(moveIndicator)
+  window.addEventListener('resize', moveIndicator)
+})
+onBeforeUnmount(() => window.removeEventListener('resize', moveIndicator))
+const firstYear = careerStartYear
+
+const categories = ['All', 'Android', 'Open Source', 'Systems & Tools', 'Web & Tools'] as const
+type CategoryFilter = (typeof categories)[number]
+
+const activeCategory = ref<CategoryFilter>('All')
+const searchQuery = ref('')
+
+function matchesSearch(project: ProjectItem): boolean {
+  const q = searchQuery.value.trim().toLowerCase()
+  if (!q) return true
+  return (
+    project.title.toLowerCase().includes(q) ||
+    project.description.toLowerCase().includes(q) ||
+    project.technologies.some((t) => t.toLowerCase().includes(q))
+  )
+}
+
+// Code projects (repos, tools, libraries) — released apps live in their own section.
+const filteredProjects = computed(() => {
+  return projects.filter((project) => {
+    if ((productionAppIds as readonly string[]).includes(project.id)) return false
+
+    let matchesCategory = false
+    if (activeCategory.value === 'All') {
+      matchesCategory = true
+    } else if (activeCategory.value === 'Open Source') {
+      matchesCategory = Boolean(project.repoUrl) || project.category === 'Open Source'
+    } else {
+      matchesCategory = project.category === activeCategory.value
+    }
+    return matchesCategory && matchesSearch(project)
+  })
+})
+
+// Released apps — shown whenever the category filter is "All" or "Android".
+const filteredApps = computed(() => {
+  if (activeCategory.value !== 'All' && activeCategory.value !== 'Android') return []
+  return productionApps.filter(matchesSearch)
+})
+</script>
+
+<template>
+  <div>
+    <header class="container page-head">
+      <p class="label">Work</p>
+      <Transition :name="`slide-${direction}`" mode="out-in">
+      <div v-if="tab === 'projects'" key="projects">
+        <h1>Apps in people’s <em>pockets.</em></h1>
+        <p class="lede">From statewide tools to worldwide install bases, plus what I build to learn.</p>
+      </div>
+      <div v-else key="experience">
+        <h1>Every role since <em>{{ firstYear }}.</em></h1>
+        <p class="lede">
+          Newest first. The same history fits on one page in the
+          <a :href="profile.resumeUrl" class="link" target="_blank" rel="noopener">résumé (PDF)</a>.
+        </p>
+      </div>
+      </Transition>
+    </header>
+
+    <div class="container">
+      <div class="tabs" role="tablist" aria-label="Work">
+        <button
+          id="tab-experience"
+          :ref="(el) => (tabRefs.experience = el as HTMLElement)"
+          type="button"
+          role="tab"
+          class="tab"
+          :aria-selected="tab === 'experience'"
+          aria-controls="panel"
+          @click="selectTab('experience')"
+        >
+          Experience <span class="tab-count">{{ experiences.length }}</span>
+        </button>
+        <button
+          id="tab-projects"
+          :ref="(el) => (tabRefs.projects = el as HTMLElement)"
+          type="button"
+          role="tab"
+          class="tab"
+          :aria-selected="tab === 'projects'"
+          aria-controls="panel"
+          @click="selectTab('projects')"
+        >
+          Projects <span class="tab-count">{{ projects.length }}</span>
+        </button>
+        <span
+          class="tab-indicator"
+          :class="{ ready: indicator.ready }"
+          :style="{ transform: `translateX(${indicator.left}px)`, width: `${indicator.width}px` }"
+          aria-hidden="true"
+        />
+      </div>
+    </div>
+
+    <section
+      id="panel"
+      class="container"
+      role="tabpanel"
+      :aria-labelledby="tab === 'projects' ? 'tab-projects' : 'tab-experience'"
+    >
+      <Transition :name="`slide-${direction}`" mode="out-in">
+      <div v-if="tab === 'projects'" key="projects">
+        <div class="controls">
+          <div class="filters" role="group" aria-label="Filter projects by category">
+            <button
+              v-for="cat in categories"
+              :key="cat"
+              type="button"
+              class="filter"
+              :aria-pressed="activeCategory === cat"
+              @click="activeCategory = cat"
+            >
+              {{ cat }}
+            </button>
+          </div>
+
+          <label class="search">
+            <span class="sr-only">Filter projects by technology or keyword</span>
+            <input v-model="searchQuery" type="search" placeholder="Search: Kotlin, maps, C++…" />
+          </label>
+        </div>
+
+        <div v-if="filteredApps.length > 0" class="group">
+          <header class="section-head">
+            <p class="label">{{ filteredApps.length }} shipped</p>
+            <h2>Released apps</h2>
+          </header>
+          <ProjectCard v-for="(project, i) in filteredApps" :key="project.id" :project="project" :index="i + 1" />
+        </div>
+
+        <div v-if="filteredProjects.length > 0" class="group">
+          <header class="section-head">
+            <p class="label">{{ filteredProjects.length }} repositories</p>
+            <h2>Code &amp; open source</h2>
+          </header>
+          <ProjectCard v-for="project in filteredProjects" :key="project.id" :project="project" />
+        </div>
+
+        <div v-if="filteredApps.length === 0 && filteredProjects.length === 0" class="empty">
+          <p>
+            Nothing matches “{{ searchQuery }}”<template v-if="activeCategory !== 'All'"> in {{ activeCategory }}</template>.
+          </p>
+          <button type="button" class="btn btn-quiet" @click="activeCategory = 'All'; searchQuery = ''">
+            Clear filters
+          </button>
+        </div>
+      </div>
+
+      <ExperienceList v-else key="experience" />
+      </Transition>
+    </section>
+  </div>
+</template>
+
+<style scoped>
+.tabs {
+  position: relative;
+  display: flex;
+  gap: 32px;
+  border-bottom: 1px solid var(--rule-strong);
+}
+
+.tab {
+  position: relative;
+  padding: 0 0 14px;
+  border: 0;
+  background: none;
+  font-family: var(--font-display);
+  font-size: clamp(1.4rem, 2.4vw, 1.75rem);
+  color: var(--ink-3);
+  cursor: pointer;
+  transition: color var(--dur) var(--ease);
+}
+
+.tab-indicator {
+  position: absolute;
+  left: 0;
+  bottom: -1px;
+  height: 2px;
+  background: var(--accent);
+  opacity: 0;
+}
+
+.tab-indicator.ready {
+  opacity: 1;
+  transition: transform 520ms var(--ease), width 520ms var(--ease);
+}
+
+/* Content slides a short distance and fades; direction follows tab order */
+.slide-forward-enter-active,
+.slide-forward-leave-active,
+.slide-back-enter-active,
+.slide-back-leave-active {
+  transition: opacity 260ms var(--ease), transform 420ms var(--ease);
+}
+
+.slide-forward-enter-from,
+.slide-back-leave-to {
+  opacity: 0;
+  transform: translateX(32px);
+}
+
+.slide-forward-leave-to,
+.slide-back-enter-from {
+  opacity: 0;
+  transform: translateX(-32px);
+}
+
+.tab:hover {
+  color: var(--ink);
+}
+
+.tab[aria-selected='true'] {
+  color: var(--ink);
+}
+
+.tab-count {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  vertical-align: super;
+  color: var(--ink-3);
+}
+
+.controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px 32px;
+  padding-top: 18px;
+  padding-bottom: 18px;
+  border-bottom: 1px solid var(--rule);
+}
+
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 22px;
+}
+
+.filter {
+  position: relative;
+  min-height: 36px;
+  padding: 0;
+  border: 0;
+  background: none;
+  font-family: var(--font-body);
+  font-size: 15px;
+  color: var(--ink-3);
+  white-space: nowrap;
+  cursor: pointer;
+  transition: color var(--dur) var(--ease);
+}
+
+.filter:hover {
+  color: var(--ink);
+}
+
+.filter[aria-pressed='true'] {
+  color: var(--ink);
+  text-decoration: underline;
+  text-decoration-color: var(--accent);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 0.45em;
+}
+
+.search {
+  flex: 1 1 220px;
+  max-width: 320px;
+}
+
+.search input {
+  width: 100%;
+  min-height: 40px;
+  padding: 0 0 4px;
+  border: 0;
+  border-bottom: 1px solid var(--rule);
+  border-radius: 0;
+  background: transparent;
+  font-family: var(--font-mono);
+  font-size: 14px;
+  color: var(--ink);
+  transition: border-color var(--dur) var(--ease);
+}
+
+.search input::placeholder {
+  color: var(--ink-3);
+}
+
+.search input:focus {
+  outline: none;
+  border-bottom-color: var(--accent);
+}
+
+.group {
+  padding-top: clamp(56px, 7vw, 88px);
+}
+
+.empty {
+  display: grid;
+  justify-items: start;
+  gap: 16px;
+  padding: 56px 0;
+  font-family: var(--font-display);
+  font-size: 1.6rem;
+}
+
+@media (max-width: 640px) {
+  .search {
+    max-width: none;
+  }
+}
+</style>

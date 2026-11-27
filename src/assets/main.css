@@ -1,0 +1,444 @@
+/* ==========================================================================
+   Design tokens. Tweak the site from here.
+   See DESIGN.md for the reasoning behind each choice.
+   ========================================================================== */
+
+:root {
+  /* Type */
+  --font-display: 'Newsreader', 'Iowan Old Style', Georgia, serif;
+  --font-body: 'IBM Plex Sans', -apple-system, 'Segoe UI', sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+
+  /* Colour: light (warm paper) */
+  --bg: #f6f5f1;
+  --bg-2: #edebe4;
+  --ink: #292524;
+  --ink-2: #57534e;
+  --ink-3: #78716c;
+  --rule: #d9d5cc;
+  --rule-strong: #292524;
+  --accent: #0369a1; /* pool blue, the only accent */
+  --accent-soft: rgba(3, 105, 161, 0.08);
+  --on-accent: #ffffff;
+  --photo-filter: none;
+
+  /* Layout */
+  --max: 1200px;
+  --gutter: clamp(16px, 4vw, 40px);
+  --section: clamp(72px, 10vw, 136px);
+
+  /* Motion: gentle, no overshoot */
+  --ease: cubic-bezier(0.16, 1, 0.3, 1);
+  --dur: 380ms;
+
+  color-scheme: light;
+
+}
+
+/* Dark: warm charcoal, never navy */
+:root[data-theme='dark'] {
+  --bg: #161513;
+  --bg-2: #1f1d1a;
+  --ink: #ece8e0;
+  --ink-2: #b9b3a8;
+  --ink-3: #8c867c;
+  --rule: #34312c;
+  --rule-strong: #ece8e0;
+  --accent: #6cb8e0;
+  --accent-soft: rgba(108, 184, 224, 0.1);
+  --on-accent: #10181d;
+  --photo-filter: brightness(0.92);
+  color-scheme: dark;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    --bg: #161513;
+    --bg-2: #1f1d1a;
+    --ink: #ece8e0;
+    --ink-2: #b9b3a8;
+    --ink-3: #8c867c;
+    --rule: #34312c;
+    --rule-strong: #ece8e0;
+    --accent: #6cb8e0;
+    --accent-soft: rgba(108, 184, 224, 0.1);
+    --on-accent: #10181d;
+    --photo-filter: brightness(0.92);
+    color-scheme: dark;
+  }
+}
+
+:root[data-theme='light'] {
+  color-scheme: only light;
+}
+
+/* ==========================================================================
+   Base
+   ========================================================================== */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  overflow-x: clip;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  scroll-padding-top: 88px;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 17px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  transition: background-color var(--dur) var(--ease), color var(--dur) var(--ease);
+}
+
+img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+a {
+  color: inherit;
+}
+
+::selection {
+  background: var(--accent);
+  color: var(--on-accent);
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 400;
+  line-height: 1.08;
+  letter-spacing: -0.015em;
+  text-wrap: balance;
+}
+
+p {
+  margin: 0;
+  text-wrap: pretty;
+}
+
+/* ==========================================================================
+   Layout helpers
+   ========================================================================== */
+
+.container {
+  width: 100%;
+  max-width: var(--max);
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: var(--gutter);
+  padding-right: var(--gutter);
+}
+
+.section {
+  padding-top: var(--section);
+}
+
+/* Section head: mono label in a narrow left column, heading beside it */
+.section-head {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+  padding-bottom: 28px;
+  border-bottom: 1px solid var(--rule-strong);
+  margin-bottom: 8px;
+}
+
+@media (min-width: 860px) {
+  .section-head {
+    grid-template-columns: 3fr 9fr;
+    align-items: baseline;
+    gap: 24px;
+  }
+}
+
+.section-head h2 {
+  font-size: clamp(2rem, 4.2vw, 3.25rem);
+}
+
+.section-head-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px 24px;
+}
+
+.label {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+
+.muted {
+  color: var(--ink-2);
+}
+
+/* ==========================================================================
+   Links and buttons
+   ========================================================================== */
+
+.link {
+  color: var(--ink);
+  text-decoration: underline;
+  text-decoration-color: var(--rule);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.22em;
+  transition: text-decoration-color var(--dur) var(--ease), color var(--dur) var(--ease);
+}
+
+.link:hover {
+  color: var(--accent);
+  text-decoration-color: currentColor;
+}
+
+.arrow-link {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.4em;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  color: var(--ink);
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.arrow-link .arrow {
+  display: inline-block;
+  transition: transform var(--dur) var(--ease);
+}
+
+.arrow-link:hover {
+  color: var(--accent);
+}
+
+.arrow-link:hover .arrow {
+  transform: translateX(3px);
+}
+
+.arrow-link.ext:hover .arrow {
+  transform: translate(2px, -2px);
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-height: 48px;
+  padding: 0 22px;
+  border: 1px solid var(--ink);
+  border-radius: 0;
+  background: var(--ink);
+  color: var(--bg);
+  font-family: var(--font-body);
+  font-size: 15px;
+  font-weight: 500;
+  text-decoration: none;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: transform var(--dur) var(--ease), background-color var(--dur) var(--ease),
+    color var(--dur) var(--ease), border-color var(--dur) var(--ease);
+}
+
+.btn:hover {
+  transform: translateY(-1.5px);
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--on-accent);
+}
+
+.btn:active {
+  transform: translateY(0.5px);
+}
+
+.btn-quiet {
+  background: transparent;
+  color: var(--ink);
+}
+
+.btn-quiet:hover {
+  background: transparent;
+  color: var(--accent);
+}
+
+.btn[disabled] {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+/* Technology list: plain mono text separated by slashes, no pills */
+.tech {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-family: var(--font-mono);
+  font-size: 12.5px;
+  color: var(--ink-3);
+}
+
+.tech li {
+  white-space: nowrap;
+}
+
+.tech li:not(:last-child)::after {
+  content: '/';
+  margin: 0 0.55em;
+  color: var(--rule);
+}
+
+/* ==========================================================================
+   Photos
+   ========================================================================== */
+
+.photo {
+  position: relative;
+  margin: 0;
+}
+
+.photo img {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+  filter: var(--photo-filter);
+}
+
+.photo figcaption {
+  margin-top: 10px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--ink-3);
+}
+
+/* ==========================================================================
+   Page transitions and reveal
+   ========================================================================== */
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 260ms var(--ease);
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Page heading used on inner pages */
+.page-head {
+  padding-top: clamp(16px, 2.5vw, 32px);
+  padding-bottom: clamp(32px, 5vw, 56px);
+}
+
+.page-head h1 {
+  margin-top: 20px;
+  font-size: clamp(2.75rem, 7.5vw, 6rem);
+  line-height: 1;
+  letter-spacing: -0.03em;
+  max-width: 14ch;
+}
+
+.page-head h1 em {
+  font-style: italic;
+}
+
+.page-head .lede {
+  margin-top: 24px;
+  max-width: 58ch;
+  font-size: clamp(1.05rem, 1.6vw, 1.2rem);
+  color: var(--ink-2);
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+@media print {
+  .nav,
+  .footer,
+  .skip-link {
+    display: none !important;
+  }
+
+  body {
+    background: #fff;
+    color: #000;
+    font-size: 11pt;
+  }
+
+  .section {
+    padding-top: 24pt;
+  }
+}
+
+/* A hairline across the content width (not the container's padding) */
+.ruled-top {
+  position: relative;
+}
+
+.ruled-top::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: var(--gutter);
+  right: var(--gutter);
+  height: 1px;
+  background: var(--rule-strong);
+}
+
+/* Emphasised heading words: italic in the accent colour, no decoration */
+.page-head h1 em {
+  color: var(--accent);
+}
