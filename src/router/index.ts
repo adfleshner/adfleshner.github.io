@@ -3,7 +3,11 @@ import HomeView from '@/views/HomeView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
-  scrollBehavior(_to, _from, savedPosition) {
+  scrollBehavior(to, from, savedPosition) {
+    // Switching tabs on the same page (query change only) keeps the scroll position
+    if (to.path === from.path) {
+      return false
+    }
     if (savedPosition) {
       return savedPosition
     }
