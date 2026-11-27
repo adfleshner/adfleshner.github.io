@@ -1,7 +1,7 @@
 <script setup lang="ts">
 /**
  * The AF monogram: two slanted strokes and one ribbon swoosh that runs from the A's crossbar into
- * the F's middle bar. Letters use the current text colour; the swoosh uses the accent.
+ * the F's middle bar (the F is drawn like a 7). Letters use the current text colour; the swoosh uses the accent.
  * The favicon (public/favicon.svg) is the same drawing on an ink tile.
  */
 defineProps<{ size?: number }>()
@@ -18,7 +18,7 @@ defineProps<{ size?: number }>()
   >
     <g fill="none" stroke="currentColor" stroke-width="9" stroke-linecap="round" stroke-linejoin="round">
       <path d="M13 86 L35 18 Q38 10 41 18 L50.5 46" />
-      <path d="M55 86 L77 18 L93 18" />
+      <path d="M57 18 L90 18 Q95 18 93 23 L69 86" />
     </g>
     <path
       class="brand-swoosh"
