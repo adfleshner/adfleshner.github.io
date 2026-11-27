@@ -32,6 +32,9 @@
   --dur: 380ms;
 
   color-scheme: light;
+
+  /* The logo's brushstroke, used as a mask for underlines (see .brush) */
+  --brush: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 12' preserveAspectRatio='none'%3E%3Cpath d='M2 9.5 Q0 6.5 3 5.5 C30 3 66 1.5 100 0.5 C70 4.5 36 8.5 6 11.5 Q3 12 2 9.5 Z'/%3E%3C/svg%3E");
 }
 
 /* Dark: warm charcoal, never navy */
@@ -383,7 +386,6 @@ p {
 
 .page-head h1 em {
   font-style: italic;
-  color: var(--accent);
 }
 
 .page-head .lede {
@@ -436,4 +438,40 @@ p {
   right: var(--gutter);
   height: 1px;
   background: var(--rule-strong);
+}
+
+/* ==========================================================================
+   Brushstroke: the swoosh from the AF mark, used as an underline.
+   Put .brush on an inline element (headings use it on <em>).
+   ========================================================================== */
+
+.brush,
+.page-head h1 em {
+  position: relative;
+  white-space: nowrap;
+}
+
+.brush::after,
+.page-head h1 em::after {
+  content: '';
+  position: absolute;
+  left: -0.12em;
+  right: -0.2em;
+  bottom: -0.02em;
+  height: 0.2em;
+  background: var(--accent);
+  -webkit-mask: var(--brush) center / 100% 100% no-repeat;
+  mask: var(--brush) center / 100% 100% no-repeat;
+  z-index: -1;
+  transform-origin: left;
+  animation: brush-in 900ms var(--ease) 250ms both;
+}
+
+@keyframes brush-in {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
 }

@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { RouterLink } from 'vue-router'
 import { profile } from '@/data/portfolio'
+import BrandMark from '@/components/BrandMark.vue'
 
 const currentYear = new Date().getFullYear()
 </script>
@@ -9,7 +10,7 @@ const currentYear = new Date().getFullYear()
   <footer class="footer">
     <div class="container footer-inner">
       <div class="footer-sign">
-        <p class="footer-name">{{ profile.name }}</p>
+        <p class="footer-name"><BrandMark :size="30" class="footer-mark" />{{ profile.name }}</p>
         <p class="footer-line">Lead software engineer, Android. {{ profile.location }}.</p>
         <p class="footer-support">
           My tools are free. If one helped,
@@ -55,6 +56,12 @@ const currentYear = new Date().getFullYear()
   font-family: var(--font-display);
   font-size: 26px;
   line-height: 1.1;
+}
+
+.footer-name {
+  display: flex;
+  align-items: center;
+  gap: 12px;
 }
 
 .footer-line {
