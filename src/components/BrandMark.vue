@@ -22,7 +22,7 @@ defineProps<{ size?: number }>()
     </g>
     <path
       class="brand-swoosh"
-      d="M5 74 Q2 67 8 64 C35 50 63 41 99 35 C67 49 39 62 12 75 Q8 77 5 74 Z"
+      d="M5 80 Q2 73 8 70 C35 58 63 52 99 47 C67 60 39 69 12 81 Q8 83 5 80 Z"
     />
   </svg>
 </template>
