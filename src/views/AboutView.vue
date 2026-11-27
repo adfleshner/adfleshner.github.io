@@ -2,7 +2,7 @@
 import { RouterLink } from 'vue-router'
 import { profile, experiences, education, skillGroups } from '@/data/portfolio'
 import portraitBw from '@/assets/photos/aaron-portrait-bw.jpg'
-import divingUsa from '@/assets/photos/aaron-diving-usa.jpg'
+import divingTwist from '@/assets/photos/aaron-diving-twist.jpg'
 
 // "March 2024 — Present" -> "2024–now"
 function years(period: string) {
@@ -42,8 +42,8 @@ const total = experiences.length
         </p>
 
         <figure class="photo story-diving">
-          <img :src="divingUsa" alt="Aaron on the springboard in a Team USA competition" width="1296" height="729" />
-          <figcaption>Competing for Team USA.</figcaption>
+          <img :src="divingTwist" alt="Aaron mid-twist, upside down, during a dive" width="640" height="640" />
+          <figcaption>Mid-twist, from my diving years.</figcaption>
         </figure>
       </div>
     </section>
@@ -153,7 +153,7 @@ const total = experiences.length
 }
 
 .story-diving img {
-  aspect-ratio: 16 / 9;
+  aspect-ratio: 3 / 2;
   object-fit: cover;
 }
 

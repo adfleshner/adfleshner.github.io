@@ -3,7 +3,7 @@ import { computed } from 'vue'
 import { RouterLink } from 'vue-router'
 import { profile, projects, productionApps, experiences, education } from '@/data/portfolio'
 import ProjectCard from '@/components/ProjectCard.vue'
-import divingTwist from '@/assets/photos/aaron-diving-twist.jpg'
+import divingUsa from '@/assets/photos/aaron-diving-usa.jpg'
 
 const current = experiences.find((e) => e.current) ?? experiences[0]
 
@@ -50,9 +50,9 @@ const sheet = computed(() =>
 
       <figure class="photo hero-photo">
         <div class="hero-photo-frame">
-          <img :src="divingTwist" alt="Aaron mid-twist, upside down, during a dive" width="640" height="640" />
+          <img :src="divingUsa" alt="Aaron in a tight tuck mid-dive, competing for Team USA" width="1296" height="729" />
         </div>
-        <figcaption>Mid-twist, from my diving years. Same habit now: get the details right before you hit the water.</figcaption>
+        <figcaption>Competing for Team USA. Same habit now: get the details right before you hit the water.</figcaption>
       </figure>
     </section>
 
@@ -186,7 +186,7 @@ const sheet = computed(() =>
 }
 
 .hero-photo-frame {
-  aspect-ratio: 4 / 5;
+  aspect-ratio: 1 / 1;
   overflow: hidden;
   background: var(--bg-2);
   /* The one motion idea: the photo drops in top-down, like entering the water */
@@ -195,7 +195,7 @@ const sheet = computed(() =>
 
 .hero-photo-frame img {
   height: 100%;
-  object-position: 50% 30%;
+  object-position: 64% 50%;
   animation: settle 1800ms var(--ease) 120ms both;
 }
 
