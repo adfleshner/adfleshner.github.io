@@ -3,6 +3,8 @@ import { ref, computed } from 'vue'
 import { projects, productionApps, productionAppIds } from '@/data/portfolio'
 import type { ProjectItem } from '@/data/portfolio'
 import ProjectCard from '@/components/ProjectCard.vue'
+import CareerList from '@/components/CareerList.vue'
+import { RouterLink } from 'vue-router'
 
 const categories = ['All', 'Android', 'Open Source', 'Systems & Tools', 'Web & Tools'] as const
 type CategoryFilter = (typeof categories)[number]
@@ -101,6 +103,17 @@ const filteredApps = computed(() => {
           Clear filters
         </button>
       </div>
+    </section>
+
+    <section class="container section">
+      <header class="section-head">
+        <p class="label">Career</p>
+        <div class="section-head-row">
+          <h2>Where I’ve worked</h2>
+          <RouterLink to="/about" class="arrow-link">Full history <span class="arrow" aria-hidden="true">→</span></RouterLink>
+        </div>
+      </header>
+      <CareerList />
     </section>
   </div>
 </template>
