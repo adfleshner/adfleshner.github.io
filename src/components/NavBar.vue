@@ -2,6 +2,7 @@
 import { ref, watch, onMounted, onBeforeUnmount } from 'vue'
 import { RouterLink, useRoute } from 'vue-router'
 import { profile } from '@/data/portfolio'
+import BrandMark from '@/components/BrandMark.vue'
 
 const route = useRoute()
 const isDark = ref(false)
@@ -80,6 +81,7 @@ onBeforeUnmount(() => {
   <header class="nav" :class="{ 'is-scrolled': scrolled, 'is-open': menuOpen }">
     <div class="container nav-inner">
       <RouterLink to="/" class="wordmark" aria-label="Aaron Fleshner, home">
+        <BrandMark class="wordmark-mark" :size="26" />
         <span class="wordmark-name">{{ profile.name }}</span>
         <span class="wordmark-role">Android, NC</span>
       </RouterLink>
@@ -153,6 +155,11 @@ onBeforeUnmount(() => {
   min-width: 0;
   text-decoration: none;
   color: var(--ink);
+}
+
+.wordmark-mark {
+  align-self: center;
+  margin-right: -2px;
 }
 
 .wordmark-name {
