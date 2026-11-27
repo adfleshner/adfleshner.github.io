@@ -19,8 +19,8 @@ real photography as the only image.
 | Type | **Newsreader** (display serif, optical sizes) for headlines, **IBM Plex Sans** for text, **IBM Plex Mono** for labels, dates and data. No Inter. |
 | Colour | Warm paper `#f6f5f1` / ink `#292524` in light, warm charcoal `#161513` in dark. One accent, pool blue `#0369a1` (dark: `#6cb8e0`). No gradients. |
 | Layout | 12-column grid, content left-aligned, sections of different shapes. Hairline rules instead of cards. |
-| Signature detail | The career history is laid out like a **competition dive sheet** (round, dive, years), a nod to Aaron's years diving for Team USA. Real diving photos replace stock art. |
-| Motion | One idea: the hero photo "enters the water" with a slow top-down clip reveal. Everything else is a gentle hover lift. Turned off under `prefers-reduced-motion`. |
+| Signature detail | Large serif headlines over small mono metadata, and real photos of Aaron in place of stock art (a portrait on the home page; the diving photos stay on About). |
+| Motion | One idea: the hero photo is revealed with a slow top-down clip. Everything else is a gentle hover lift. Turned off under `prefers-reduced-motion`. |
 | Copy | Specific facts from `src/data/*` (employers, apps, places). No "unlock", "seamless", "on your terms". |
 
 ## AI tells removed from the previous version

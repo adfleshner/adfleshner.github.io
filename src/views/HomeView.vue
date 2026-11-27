@@ -3,7 +3,7 @@ import { computed } from 'vue'
 import { RouterLink } from 'vue-router'
 import { profile, projects, productionApps, experiences, education } from '@/data/portfolio'
 import ProjectCard from '@/components/ProjectCard.vue'
-import divingUsa from '@/assets/photos/aaron-diving-usa.jpg'
+import portraitBw from '@/assets/photos/aaron-portrait-bw.jpg'
 
 const current = experiences.find((e) => e.current) ?? experiences[0]
 
@@ -22,10 +22,8 @@ function years(period: string) {
   return end && end !== start ? `${start}–${end}` : start
 }
 
-// Career, oldest first, numbered like rounds on a dive sheet
-const sheet = computed(() =>
-  [...experiences].reverse().map((e, i) => ({ ...e, round: i + 1, years: years(e.period) }))
-)
+// Career, newest first
+const career = computed(() => experiences.map((e) => ({ ...e, years: years(e.period) })))
 </script>
 
 <template>
@@ -50,9 +48,9 @@ const sheet = computed(() =>
 
       <figure class="photo hero-photo">
         <div class="hero-photo-frame">
-          <img :src="divingUsa" alt="Aaron in a tight tuck mid-dive, competing for Team USA" width="1296" height="729" />
+          <img :src="portraitBw" alt="Black and white portrait of Aaron Fleshner" width="946" height="960" />
         </div>
-        <figcaption>Competing for Team USA. Same habit now: get the details right before you hit the water.</figcaption>
+        <figcaption>{{ profile.name }}, {{ profile.location }}</figcaption>
       </figure>
     </section>
 
@@ -87,39 +85,23 @@ const sheet = computed(() =>
       <ProjectCard v-for="(app, i) in productionApps" :key="app.id" :project="app" :index="i + 1" compact />
     </section>
 
-    <!-- Dive sheet -->
+    <!-- Experience -->
     <section class="container section">
       <header class="section-head">
         <p class="label">Career</p>
         <div class="section-head-row">
-          <h2>The dive sheet</h2>
+          <h2>Where I’ve worked</h2>
           <RouterLink to="/about" class="arrow-link">Full history <span class="arrow" aria-hidden="true">→</span></RouterLink>
         </div>
       </header>
 
-      <p class="sheet-note muted">
-        Divers hand in a sheet listing every dive, in order, before they compete. Here is mine for the last
-        twelve years, in the order performed.
-      </p>
-
-      <table class="sheet">
-        <thead>
-          <tr>
-            <th scope="col">Rd</th>
-            <th scope="col">Role</th>
-            <th scope="col">Team</th>
-            <th scope="col" class="sheet-years">Years</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="row in sheet" :key="row.company + row.period" :class="{ 'is-current': row.current }">
-            <td class="sheet-round">{{ row.round }}</td>
-            <td class="sheet-role">{{ row.role }}</td>
-            <td class="sheet-team">{{ row.company }}<span class="sheet-place">{{ row.location }}</span></td>
-            <td class="sheet-years">{{ row.years }}</td>
-          </tr>
-        </tbody>
-      </table>
+      <ol class="career">
+        <li v-for="job in career" :key="job.company + job.period" class="career-row" :class="{ 'is-current': job.current }">
+          <span class="career-years">{{ job.years }}</span>
+          <span class="career-role">{{ job.role }}</span>
+          <span class="career-company">{{ job.company }}<span class="career-place">{{ job.location }}</span></span>
+        </li>
+      </ol>
     </section>
 
     <!-- Open source -->
@@ -195,7 +177,7 @@ const sheet = computed(() =>
 
 .hero-photo-frame img {
   height: 100%;
-  object-position: 64% 50%;
+  object-position: 50% 40%;
   animation: settle 1800ms var(--ease) 120ms both;
 }
 
@@ -273,106 +255,55 @@ const sheet = computed(() =>
   }
 }
 
-/* Dive sheet */
-.sheet-note {
-  max-width: 60ch;
-  margin-top: 20px;
-  margin-bottom: 20px;
-  font-size: 15.5px;
+/* Experience */
+.career {
+  margin: 0;
+  padding: 0;
+  list-style: none;
 }
 
-.sheet {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 16px;
-}
-
-.sheet th {
-  padding: 10px 12px 10px 0;
+.career-row {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 4px;
+  padding-top: 20px;
+  padding-bottom: 20px;
   border-bottom: 1px solid var(--rule);
-  font-family: var(--font-mono);
-  font-size: 11.5px;
-  font-weight: 500;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  text-align: left;
-  color: var(--ink-3);
 }
 
-.sheet td {
-  padding: 18px 12px 18px 0;
-  border-bottom: 1px solid var(--rule);
-  vertical-align: baseline;
-}
-
-.sheet-round {
-  width: 48px;
+.career-years {
   font-family: var(--font-mono);
   font-size: 13px;
   color: var(--ink-3);
+  white-space: nowrap;
 }
 
-.sheet-role {
+.is-current .career-years {
+  color: var(--accent);
+}
+
+.career-role {
   font-family: var(--font-display);
-  font-size: clamp(1.15rem, 2vw, 1.45rem);
+  font-size: clamp(1.3rem, 2.2vw, 1.6rem);
   line-height: 1.2;
 }
 
-.sheet-team {
+.career-company {
   color: var(--ink-2);
 }
 
-.sheet-place {
+.career-place {
   display: block;
   font-family: var(--font-mono);
   font-size: 12px;
   color: var(--ink-3);
 }
 
-.sheet-years {
-  font-family: var(--font-mono);
-  font-size: 13px;
-  text-align: right !important;
-  white-space: nowrap;
-  padding-right: 0 !important;
-}
-
-.is-current .sheet-round,
-.is-current .sheet-years {
-  color: var(--accent);
-}
-
-@media (max-width: 640px) {
-  .sheet thead {
-    display: none;
-  }
-
-  .sheet tr {
-    display: grid;
-    grid-template-columns: 32px 1fr auto;
-    gap: 4px 8px;
-    padding: 16px 0;
-    border-bottom: 1px solid var(--rule);
-  }
-
-  .sheet td {
-    padding: 0;
-    border: 0;
-  }
-
-  .sheet-round {
-    grid-row: 1 / span 2;
-    width: auto;
-  }
-
-  .sheet-team {
-    grid-column: 2 / -1;
-    font-size: 15px;
-  }
-
-  .sheet-years {
-    grid-column: 3;
-    grid-row: 1;
+@media (min-width: 860px) {
+  .career-row {
+    grid-template-columns: 3fr 5fr 4fr;
+    gap: 24px;
+    align-items: baseline;
   }
 }
 

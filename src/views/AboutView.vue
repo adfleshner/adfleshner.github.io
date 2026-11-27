@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { RouterLink } from 'vue-router'
 import { profile, experiences, education, skillGroups } from '@/data/portfolio'
-import portraitBw from '@/assets/photos/aaron-portrait-bw.jpg'
+import portrait from '@/assets/profile.jpg'
 import divingTwist from '@/assets/photos/aaron-diving-twist.jpg'
 
 // "March 2024 — Present" -> "2024–now"
@@ -12,7 +12,6 @@ function years(period: string) {
   return end && end !== start ? `${start}–${end}` : start
 }
 
-const total = experiences.length
 </script>
 
 <template>
@@ -29,7 +28,7 @@ const total = experiences.length
     <!-- Story -->
     <section class="container story ruled-top">
       <figure class="photo story-portrait">
-        <img :src="portraitBw" alt="Black and white portrait of Aaron Fleshner" width="946" height="960" />
+        <img :src="portrait" alt="Portrait of Aaron Fleshner" width="400" height="400" />
         <figcaption>{{ profile.name }}, {{ profile.location }}</figcaption>
       </figure>
 
@@ -52,12 +51,11 @@ const total = experiences.length
     <section class="container section">
       <header class="section-head">
         <p class="label">Experience</p>
-        <h2>The full dive sheet</h2>
+        <h2>Experience</h2>
       </header>
 
-      <article v-for="(item, i) in experiences" :key="item.company + item.period" class="job">
+      <article v-for="item in experiences" :key="item.company + item.period" class="job">
         <div class="job-side">
-          <span class="job-round">Rd {{ total - i }}</span>
           <span class="job-years" :class="{ 'is-current': item.current }">{{ years(item.period) }}</span>
         </div>
 
