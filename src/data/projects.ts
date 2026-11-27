@@ -19,6 +19,20 @@ export interface ProjectItem {
 
 export const projects: ProjectItem[] = [
   {
+    id: 'mac-glimmer',
+    title: 'Glimmer',
+    tagline: 'Brings back screen brightness and keyboard light on MacBooks with swapped screens.',
+    description:
+      'A small macOS menu bar app. After a screen from another MacBook model is fitted, macOS stops controlling brightness and turns the keyboard light off at login. I traced that through the system logs and drivers to a panel-ID mismatch. Glimmer uses macOS’s own controls where they still work and its own workarounds where they don’t, with no kernel extensions or SIP changes. Free download, Apple Silicon and Intel.',
+    category: 'Systems & Tools',
+    featured: true,
+    technologies: ['Swift', 'SwiftUI', 'AppKit', 'IOKit / HID', 'macOS', 'GitHub Actions'],
+    liveUrl: 'https://github.com/adfleshner/mac-glimmer/releases/latest',
+    liveLabel: 'Download',
+    repoUrl: 'https://github.com/adfleshner/mac-glimmer',
+    metrics: 'macOS · 2026'
+  },
+  {
     id: 'random-love',
     title: 'Random-Love',
     tagline: 'Curated developer articles and tech stories Android client',
