@@ -1,6 +1,6 @@
 # Aaron Fleshner — Personal Portfolio & Resume
 
-> **Lead Software Engineer (Android Focus)** based in Durham, NC.  
+> **Lead Software Engineer (Android Focus)** based in NC.  
 > Personal website, career timeline, and project showcase built with modern Vue 3 and TypeScript.
 
 ---
