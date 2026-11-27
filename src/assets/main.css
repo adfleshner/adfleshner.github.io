@@ -370,7 +370,7 @@ p {
 
 /* Page heading used on inner pages */
 .page-head {
-  padding-top: clamp(48px, 8vw, 104px);
+  padding-top: clamp(16px, 2.5vw, 32px);
   padding-bottom: clamp(32px, 5vw, 56px);
 }
 

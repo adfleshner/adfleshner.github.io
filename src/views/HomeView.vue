@@ -70,7 +70,7 @@ const current = experiences.find((e) => e.current) ?? experiences[0]
   display: grid;
   grid-template-columns: 1fr;
   gap: 40px;
-  padding-top: clamp(40px, 7vw, 96px);
+  padding-top: clamp(16px, 2.5vw, 32px);
 }
 
 .hero-title {
