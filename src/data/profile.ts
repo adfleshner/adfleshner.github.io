@@ -29,6 +29,8 @@ export interface Profile {
   aboutParagraphs: string[]
   stats: StatItem[]
   socials: SocialLink[]
+  /** Tip links, shown quietly on Contact and in the footer. First one is the primary. */
+  support: SocialLink[]
 }
 
 export const profile: Profile = {
@@ -64,6 +66,12 @@ export const profile: Profile = {
       label: 'LinkedIn',
       url: 'https://www.linkedin.com/in/aaron-fleshner-60233750/'
     }
+  ],
+  support: [
+    { label: 'Buy Me a Coffee', url: 'https://buymeacoffee.com/adfleshner' },
+    { label: 'Venmo', url: 'https://venmo.com/u/Aaron-fleshner' },
+    { label: 'Cash App', url: 'https://cash.app/$adfleshner' },
+    { label: 'Revolut', url: 'https://revolut.me/aaron7bbx' }
   ]
 }
 

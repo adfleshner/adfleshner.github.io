@@ -169,6 +169,21 @@ async function copyEmail() {
             <span>{{ profile.location }}</span>
           </li>
         </ul>
+
+        <aside class="support" aria-labelledby="support-title">
+          <h2 id="support-title" class="support-title">Support my work</h2>
+          <p class="muted">
+            Glimmer and my open-source projects are free and will stay that way. If one of them saved you
+            some time, a small tip is a kind way to say thanks.
+          </p>
+          <ul class="support-links">
+            <li v-for="s in profile.support" :key="s.url">
+              <a :href="s.url" class="arrow-link ext" target="_blank" rel="noopener noreferrer">
+                {{ s.label }} <span class="arrow" aria-hidden="true">↗</span>
+              </a>
+            </li>
+          </ul>
+        </aside>
       </div>
 
       <div class="form-wrap">
@@ -283,6 +298,30 @@ async function copyEmail() {
   border-bottom: 1px solid var(--rule);
   font-size: 15.5px;
   overflow-wrap: anywhere;
+}
+
+.support {
+  display: grid;
+  gap: 12px;
+  width: 100%;
+  margin-top: 40px;
+  padding: 24px;
+  background: var(--bg-2);
+  font-size: 15.5px;
+}
+
+.support-title {
+  font-size: 1.5rem;
+  line-height: 1.15;
+}
+
+.support-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 22px;
+  margin: 4px 0 0;
+  padding: 0;
+  list-style: none;
 }
 
 .form {

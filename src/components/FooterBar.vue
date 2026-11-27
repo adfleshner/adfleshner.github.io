@@ -11,6 +11,11 @@ const currentYear = new Date().getFullYear()
       <div class="footer-sign">
         <p class="footer-name">{{ profile.name }}</p>
         <p class="footer-line">Lead software engineer, Android. {{ profile.location }}.</p>
+        <p class="footer-support">
+          My tools are free. If one helped,
+          <a :href="profile.support[0]?.url" class="link" target="_blank" rel="noopener noreferrer">buy me a coffee</a>
+          or see <RouterLink to="/contact" class="link">other ways to support</RouterLink>.
+        </p>
       </div>
 
       <ul class="footer-links">
@@ -55,6 +60,17 @@ const currentYear = new Date().getFullYear()
 .footer-line {
   margin-top: 6px;
   font-size: 15px;
+  color: var(--ink-2);
+}
+
+.footer-support {
+  margin-top: 16px;
+  max-width: 44ch;
+  font-size: 14px;
+  color: var(--ink-3);
+}
+
+.footer-support .link {
   color: var(--ink-2);
 }
 
