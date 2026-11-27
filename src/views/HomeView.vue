@@ -1,18 +1,10 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { RouterLink } from 'vue-router'
-import { profile, projects, productionApps, experiences, education } from '@/data/portfolio'
-import ProjectCard from '@/components/ProjectCard.vue'
+import { profile, experiences, education } from '@/data/portfolio'
 import portraitBw from '@/assets/photos/aaron-portrait-bw.jpg'
 
 const current = experiences.find((e) => e.current) ?? experiences[0]
-
-// Open-source and side projects (everything featured that isn't a shipped app or this site)
-const sideProjects = computed(() =>
-  projects.filter(
-    (p) => p.featured && p.id !== 'personal-site' && !productionApps.some((app) => app.id === p.id)
-  )
-)
 
 // "March 2024 — Present" -> "2024–now"
 function years(period: string) {
@@ -71,19 +63,6 @@ const career = computed(() => experiences.map((e) => ({ ...e, years: years(e.per
       </dl>
     </section>
 
-    <!-- Selected work -->
-    <section class="container section">
-      <header class="section-head">
-        <p class="label">Shipped apps</p>
-        <div class="section-head-row">
-          <h2>Selected work</h2>
-          <RouterLink to="/projects" class="arrow-link">All projects <span class="arrow" aria-hidden="true">→</span></RouterLink>
-        </div>
-      </header>
-
-      <ProjectCard v-for="(app, i) in productionApps" :key="app.id" :project="app" :index="i + 1" compact />
-    </section>
-
     <!-- Experience -->
     <section class="container section">
       <header class="section-head">
@@ -101,21 +80,6 @@ const career = computed(() => experiences.map((e) => ({ ...e, years: years(e.per
           <span class="career-company">{{ job.company }}<span class="career-place">{{ job.location }}</span></span>
         </li>
       </ol>
-    </section>
-
-    <!-- Open source -->
-    <section class="container section">
-      <header class="section-head">
-        <p class="label">On GitHub</p>
-        <div class="section-head-row">
-          <h2>Side projects &amp; writing</h2>
-          <a href="https://github.com/adfleshner" class="arrow-link ext" target="_blank" rel="noopener noreferrer">
-            github.com/adfleshner <span class="arrow" aria-hidden="true">↗</span>
-          </a>
-        </div>
-      </header>
-
-      <ProjectCard v-for="p in sideProjects" :key="p.id" :project="p" compact />
     </section>
 
     <!-- Contact -->
