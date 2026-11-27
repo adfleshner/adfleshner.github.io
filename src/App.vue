@@ -2,17 +2,16 @@
 import { RouterView } from 'vue-router'
 import NavBar from '@/components/NavBar.vue'
 import FooterBar from '@/components/FooterBar.vue'
-import CodeCanvasBackground from '@/components/CodeCanvasBackground.vue'
 </script>
 
 <template>
+  <a class="skip-link" href="#main">Skip to content</a>
   <div class="app-shell">
-    <CodeCanvasBackground />
     <NavBar />
 
-    <main class="main-content">
+    <main id="main" class="main-content">
       <RouterView v-slot="{ Component }">
-        <Transition name="fade-slide" mode="out-in">
+        <Transition name="fade" mode="out-in">
           <component :is="Component" />
         </Transition>
       </RouterView>
@@ -27,14 +26,25 @@ import CodeCanvasBackground from '@/components/CodeCanvasBackground.vue'
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  position: relative;
-  z-index: 1;
 }
 
 .main-content {
   flex: 1;
-  position: relative;
-  z-index: 1;
+}
+
+.skip-link {
+  position: absolute;
+  left: 12px;
+  top: -48px;
+  z-index: 100;
+  padding: 10px 14px;
+  background: var(--ink);
+  color: var(--bg);
+  font-size: 14px;
+  text-decoration: none;
+}
+
+.skip-link:focus {
+  top: 12px;
 }
 </style>
-

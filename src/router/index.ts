@@ -14,13 +14,13 @@ const router = createRouter({
       path: '/',
       name: 'home',
       component: HomeView,
-      meta: { title: 'Home' }
+      meta: { title: '' }
     },
     {
       path: '/about',
       name: 'about',
       component: () => import('@/views/AboutView.vue'),
-      meta: { title: 'About & Resume' }
+      meta: { title: 'About' }
     },
     {
       path: '/projects',
@@ -41,7 +41,7 @@ import { profile } from '@/data/portfolio'
 
 router.afterEach((to) => {
   const pageTitle = to.meta.title as string | undefined
-  document.title = pageTitle ? `${pageTitle} — ${profile.name} Portfolio` : `${profile.name} Portfolio`
+  document.title = pageTitle ? `${pageTitle} · ${profile.name}` : `${profile.name}, Lead Android Engineer`
 })
 
 export default router

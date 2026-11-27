@@ -1,85 +1,68 @@
 <script setup lang="ts">
 import type { ProjectItem } from '@/data/portfolio'
 
-defineProps<{
-  project: ProjectItem
-}>()
+/**
+ * One project as a row in a numbered list (no card chrome).
+ * `index` is shown as the row number; `compact` hides the long description.
+ */
+withDefaults(
+  defineProps<{
+    project: ProjectItem
+    index?: number
+    compact?: boolean
+  }>(),
+  { index: undefined, compact: false }
+)
+
+function pad(n: number) {
+  return String(n).padStart(2, '0')
+}
 </script>
 
 <template>
-  <article class="card project-card glass-card" :class="{ 'current-card': project.current }">
-    <div class="project-top">
-      <div class="project-meta">
-        <div class="meta-left">
-          <span class="project-category">{{ project.category }}</span>
-          <span v-if="project.articleUrl" class="article-pill">Medium Article</span>
-        </div>
-        <span
-          v-if="project.metrics"
-          class="project-metrics"
-          :class="{ 'is-current': project.current }"
-        >
-          <span class="metrics-dot" :class="{ 'pulse-dot': project.current }" />
-          {{ project.metrics }}
-        </span>
-      </div>
+  <article class="row" :class="{ 'no-num': index === undefined }">
+    <span v-if="index !== undefined" class="row-num" aria-hidden="true">{{ pad(index) }}</span>
 
-      <h3 class="project-title editorial-serif">{{ project.title }}</h3>
-      <p class="project-tagline">{{ project.tagline }}</p>
-      <p class="project-desc">{{ project.description }}</p>
+    <div class="row-main">
+      <h3 class="row-title">{{ project.title }}</h3>
+      <p class="row-tagline">{{ project.tagline }}</p>
+      <p v-if="!compact" class="row-desc">{{ project.description }}</p>
+      <ul class="tech row-tech">
+        <li v-for="tech in project.technologies" :key="tech">{{ tech }}</li>
+      </ul>
     </div>
 
-    <div class="project-bottom">
-      <div class="tech-list">
-        <span v-for="tech in project.technologies" :key="tech" class="tag">
-          {{ tech }}
-        </span>
-      </div>
-
-      <div class="project-links">
-        <a
-          v-if="project.articleUrl"
-          :href="project.articleUrl"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="project-link article-link"
-        >
-          <svg class="article-icon" viewBox="0 0 24 24" width="14" height="14" fill="currentColor">
-            <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/>
-          </svg>
-          <span>{{ project.articleLabel || 'Read Article' }}</span>
-          <span class="link-arrow">↗</span>
-        </a>
-
-        <a
-          v-if="project.repoUrl"
-          :href="project.repoUrl"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="project-link"
-        >
-          <svg class="project-link-icon" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <polyline points="16 18 22 12 16 6" />
-            <polyline points="8 6 2 12 8 18" />
-          </svg>
-          <span>Source Code</span>
-          <span class="link-arrow">↗</span>
-        </a>
-
+    <div class="row-side">
+      <span v-if="project.metrics" class="row-meta">
+        <span v-if="project.current" class="live-dot" aria-hidden="true" />{{ project.metrics }}
+      </span>
+      <div class="row-links">
         <a
           v-if="project.liveUrl"
           :href="project.liveUrl"
           target="_blank"
           rel="noopener noreferrer"
-          class="project-link"
+          class="arrow-link ext"
         >
-          <svg class="project-link-icon" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="12" cy="12" r="10" />
-            <line x1="2" y1="12" x2="22" y2="12" />
-            <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
-          </svg>
-          <span>{{ project.liveLabel || 'Live Demo' }}</span>
-          <span class="link-arrow">↗</span>
+          {{ project.liveLabel || 'Visit' }} <span class="arrow" aria-hidden="true">↗</span>
+        </a>
+        <a
+          v-if="project.articleUrl"
+          :href="project.articleUrl"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="arrow-link ext"
+        >
+          {{ project.articleLabel || 'Article' }} <span class="arrow" aria-hidden="true">↗</span>
+        </a>
+        <a
+          v-if="project.repoUrl"
+          :href="project.repoUrl"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="arrow-link ext"
+        >
+          Source <span class="arrow" aria-hidden="true">↗</span>
         </a>
       </div>
     </div>
@@ -87,203 +70,103 @@ defineProps<{
 </template>
 
 <style scoped>
-.project-card {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  gap: 1.5rem;
-  height: 100%;
-  padding: 1.75rem;
-  border-radius: 20px;
-  background: var(--bg-glass-card);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid var(--border-subtle);
-  transition: var(--transition-hover);
+.row {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 14px;
+  padding-top: 28px;
+  padding-bottom: 28px;
+  border-bottom: 1px solid var(--rule);
 }
 
-.project-card:hover {
-  transform: var(--btn-hover-transform);
-  border-color: var(--border-hover);
-  box-shadow: 0 16px 36px -12px rgba(0, 0, 0, 0.35);
-}
-
-.project-card.current-card {
-  border-color: rgba(16, 185, 129, 0.35);
-}
-
-.project-card.current-card:hover {
-  border-color: rgba(16, 185, 129, 0.6);
-  box-shadow: 0 16px 36px -12px rgba(16, 185, 129, 0.2);
-}
-
-.project-meta {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-  margin-bottom: 0.85rem;
-}
-
-.meta-left {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.project-category {
+.row-num {
   font-family: var(--font-mono);
-  font-size: 0.74rem;
-  color: var(--accent-primary);
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  font-weight: 600;
+  font-size: 13px;
+  color: var(--ink-3);
 }
 
-.project-metrics {
+.row-title {
+  font-size: clamp(1.6rem, 2.8vw, 2.15rem);
+  line-height: 1.1;
+}
+
+.row-tagline {
+  margin-top: 8px;
+  font-size: 17px;
+  color: var(--ink);
+}
+
+.row-desc {
+  margin-top: 10px;
+  max-width: 62ch;
+  font-size: 15.5px;
+  color: var(--ink-2);
+}
+
+.row-tech {
+  margin-top: 14px;
+}
+
+.row-side {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px 20px;
+}
+
+.row-meta {
   display: inline-flex;
   align-items: center;
-  gap: 0.35rem;
+  gap: 8px;
   font-family: var(--font-mono);
-  font-size: 0.72rem;
-  color: var(--accent-emerald);
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--ink-3);
   white-space: nowrap;
 }
 
-.project-metrics.is-current {
-  font-weight: 700;
-  padding: 0.18rem 0.55rem;
-  border-radius: 999px;
-  background: rgba(16, 185, 129, 0.12);
-  border: 1px solid rgba(16, 185, 129, 0.35);
-  box-shadow: 0 0 12px -2px rgba(16, 185, 129, 0.25);
-}
-
-.metrics-dot {
-  width: 5px;
-  height: 5px;
+.live-dot {
+  width: 7px;
+  height: 7px;
   border-radius: 50%;
-  background: var(--accent-emerald);
-  flex-shrink: 0;
+  background: var(--accent);
 }
 
-.metrics-dot.pulse-dot {
-  box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.6);
-  animation: dreamy-pulse 2.6s infinite cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-@keyframes dreamy-pulse {
-  0% {
-    box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.6);
-  }
-  60% {
-    box-shadow: 0 0 0 5px rgba(16, 185, 129, 0);
-  }
-  100% {
-    box-shadow: 0 0 0 0 rgba(16, 185, 129, 0);
-  }
-}
-
-.project-title {
-  font-family: var(--font-display);
-  font-size: 1.32rem;
-  font-weight: 700;
-  letter-spacing: -0.025em;
-  color: var(--text-primary);
-  margin-bottom: 0.35rem;
-}
-
-.project-tagline {
-  font-weight: 500;
-  color: var(--text-primary);
-  font-size: 0.94rem;
-  margin-bottom: 0.65rem;
-  line-height: 1.4;
-}
-
-.project-desc {
-  color: var(--text-secondary);
-  font-size: 0.9rem;
-  line-height: 1.55;
-}
-
-.project-bottom {
-  display: flex;
-  flex-direction: column;
-  gap: 1.15rem;
-  padding-top: 1.1rem;
-  border-top: 1px solid var(--border-subtle);
-}
-
-.tech-list {
+.row-links {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.45rem;
+  gap: 8px 20px;
 }
 
-.project-links {
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 0.75rem 1.25rem;
-}
+@media (min-width: 860px) {
+  .row {
+    grid-template-columns: 3fr 6fr 3fr;
+    gap: 24px;
+    padding-top: 36px;
+    padding-bottom: 36px;
+  }
 
-.project-link {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.35rem;
-  font-size: 0.86rem;
-  font-weight: 600;
-  color: var(--text-primary);
-  text-decoration: none;
-  transition: color var(--transition-hover);
-}
+  .row.no-num .row-main {
+    grid-column: 2;
+  }
 
-.project-link-icon {
-  flex-shrink: 0;
-  color: var(--text-muted);
-  transition: color var(--transition-hover);
-}
+  .row-num {
+    padding-top: 10px;
+  }
 
-.link-arrow {
-  font-size: 0.85rem;
-  color: var(--text-muted);
-  transition: transform var(--transition-hover), color var(--transition-hover);
-}
+  .row-side {
+    flex-direction: column;
+    align-items: flex-end;
+    justify-content: flex-start;
+    padding-top: 10px;
+    text-align: right;
+  }
 
-.project-link:hover {
-  color: var(--accent-primary);
-}
-
-.project-link:hover .project-link-icon,
-.project-link:hover .link-arrow {
-  color: var(--accent-primary);
-  transform: translate(1.5px, -1.5px);
-}
-
-.article-pill {
-  font-family: var(--font-mono);
-  font-size: 0.68rem;
-  font-weight: 600;
-  padding: 0.15rem 0.55rem;
-  border-radius: 999px;
-  background: rgba(129, 140, 248, 0.14);
-  color: var(--accent-secondary);
-  border: 1px solid rgba(129, 140, 248, 0.35);
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-}
-
-.article-link {
-  color: var(--accent-secondary);
-}
-
-.article-link:hover {
-  color: var(--accent-primary);
-}
-
-.article-icon {
-  flex-shrink: 0;
+  .row-links {
+    flex-direction: column;
+    align-items: flex-end;
+  }
 }
 </style>
