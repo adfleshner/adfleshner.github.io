@@ -30,6 +30,8 @@ export const projects: ProjectItem[] = [
     liveUrl: 'https://github.com/adfleshner/mac-glimmer/releases/latest',
     liveLabel: 'Download',
     repoUrl: 'https://github.com/adfleshner/mac-glimmer',
+    articleUrl: 'https://medium.com/@adfleshner/fixing-a-macbook-keyboard-light-that-turns-off-when-you-log-in-after-a-screen-replacement-89998e0d547e',
+    articleLabel: 'Medium Article',
     metrics: 'macOS · 2026'
   },
   {
