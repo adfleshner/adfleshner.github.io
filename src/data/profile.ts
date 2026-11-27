@@ -1,5 +1,14 @@
 import profilePhoto from '@/assets/profile.jpg'
 import portraitBwPhoto from '@/assets/photos/aaron-portrait-bw.jpg'
+import { experiences } from './experience'
+
+/** Year the first job started, read from the experience data (currently 2012). */
+export const careerStartYear = Math.min(
+  ...experiences.map((e) => Number(e.period.match(/\d{4}/)?.[0] ?? new Date().getFullYear()))
+)
+
+/** Years of professional experience: current year minus the start year, so it stays right every January. */
+export const yearsExperience = new Date().getFullYear() - careerStartYear
 
 export interface SocialLink {
   label: string
@@ -53,7 +62,7 @@ export const profile: Profile = {
     'My creative energy thrives in finding novel ways to present information with a keen focus on enhancing the user experience. I care deeply about delivering essential information clearly, pushing what is possible on Android, and crafting reliable, maintainable architectures in Kotlin and Jetpack Compose.'
   ],
   stats: [
-    { value: '12+', label: 'Years Engineering' },
+    { value: `${yearsExperience}+`, label: 'Years Engineering' },
     { value: '64+', label: 'GitHub Repositories' },
     { value: 'Lead', label: 'Android Focus' }
   ],

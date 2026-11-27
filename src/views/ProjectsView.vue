@@ -5,7 +5,7 @@ import type { ProjectItem } from '@/data/portfolio'
 import ProjectCard from '@/components/ProjectCard.vue'
 import ExperienceList from '@/components/ExperienceList.vue'
 import { useRoute, useRouter } from 'vue-router'
-import { profile, experiences } from '@/data/portfolio'
+import { profile, experiences, careerStartYear } from '@/data/portfolio'
 
 // Two tabs on the Work page. Experience is first and the default; Projects lives at ?tab=projects
 // so either can be linked to.
@@ -39,7 +39,7 @@ onMounted(() => {
   window.addEventListener('resize', moveIndicator)
 })
 onBeforeUnmount(() => window.removeEventListener('resize', moveIndicator))
-const firstYear = Math.min(...experiences.map((e) => Number(e.period.match(/\d{4}/)?.[0] ?? 9999)))
+const firstYear = careerStartYear
 
 const categories = ['All', 'Android', 'Open Source', 'Systems & Tools', 'Web & Tools'] as const
 type CategoryFilter = (typeof categories)[number]

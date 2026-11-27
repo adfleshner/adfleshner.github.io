@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { RouterLink } from 'vue-router'
-import { profile, education, skillGroups } from '@/data/portfolio'
+import { profile, education, skillGroups, yearsExperience } from '@/data/portfolio'
 import portrait from '@/assets/profile.jpg'
 import divingTwist from '@/assets/photos/aaron-diving-twist.jpg'
 
@@ -10,7 +10,7 @@ import divingTwist from '@/assets/photos/aaron-diving-twist.jpg'
   <div class="about">
     <header class="container page-head">
       <p class="label">About</p>
-      <h1>Twelve years of Android, and a <em>springboard</em> before that.</h1>
+      <h1>{{ yearsExperience }} years of Android, and a <em>springboard</em> before that.</h1>
       <div class="head-actions">
         <a :href="profile.resumeUrl" class="btn" target="_blank" rel="noopener">Download résumé (PDF)</a>
         <RouterLink to="/projects" class="btn btn-quiet">Experience</RouterLink>

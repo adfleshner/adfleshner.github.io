@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { RouterLink } from 'vue-router'
-import { profile, experiences, education } from '@/data/portfolio'
+import { profile, experiences, education, yearsExperience, careerStartYear } from '@/data/portfolio'
 import portraitBw from '@/assets/photos/aaron-portrait-bw.jpg'
 
 const current = experiences.find((e) => e.current) ?? experiences[0]
@@ -17,7 +17,7 @@ const current = experiences.find((e) => e.current) ?? experiences[0]
           I build thoughtful, <em class="brush">reliable</em> Android apps.
         </h1>
         <p class="hero-lede">
-          Twelve years of native Android, from statewide public-safety apps to install bases around the world.
+          {{ yearsExperience }} years of native Android, from statewide public-safety apps to install bases around the world.
           Before software, I dived internationally for Team USA.
         </p>
         <div class="hero-actions">
@@ -43,7 +43,7 @@ const current = experiences.find((e) => e.current) ?? experiences[0]
         </div>
         <div>
           <dt class="label">Since</dt>
-          <dd>Shipping Android apps since 2012</dd>
+          <dd>Shipping Android apps since {{ careerStartYear }}</dd>
         </div>
         <div>
           <dt class="label">Studied</dt>
