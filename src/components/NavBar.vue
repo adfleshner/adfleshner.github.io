@@ -81,7 +81,7 @@ onBeforeUnmount(() => {
     <div class="container nav-inner">
       <RouterLink to="/" class="wordmark" aria-label="Aaron Fleshner, home">
         <span class="wordmark-name">{{ profile.name }}</span>
-        <span class="wordmark-role">Android, Durham NC</span>
+        <span class="wordmark-role">Android engineer</span>
       </RouterLink>
 
       <nav class="nav-links" aria-label="Primary">
