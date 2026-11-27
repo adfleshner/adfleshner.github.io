@@ -13,7 +13,7 @@ import divingTwist from '@/assets/photos/aaron-diving-twist.jpg'
       <h1>Twelve years of Android, and a <em>springboard</em> before that.</h1>
       <div class="head-actions">
         <a :href="profile.resumeUrl" class="btn" target="_blank" rel="noopener">Download résumé (PDF)</a>
-        <RouterLink :to="{ path: '/projects', query: { tab: 'experience' } }" class="btn btn-quiet">Experience</RouterLink>
+        <RouterLink to="/projects" class="btn btn-quiet">Experience</RouterLink>
       </div>
     </header>
 

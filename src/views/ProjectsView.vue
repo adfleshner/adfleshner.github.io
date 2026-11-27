@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed, watch, nextTick, onMounted, onBeforeUnmount } from 'vue'
 import { projects, productionApps, productionAppIds } from '@/data/portfolio'
 import type { ProjectItem } from '@/data/portfolio'
 import ProjectCard from '@/components/ProjectCard.vue'
@@ -7,14 +7,38 @@ import ExperienceList from '@/components/ExperienceList.vue'
 import { useRoute, useRouter } from 'vue-router'
 import { profile, experiences } from '@/data/portfolio'
 
-// Two tabs on the Work page; the active one lives in the URL (?tab=experience) so it can be linked to.
-type Tab = 'projects' | 'experience'
+// Two tabs on the Work page. Experience is first and the default; Projects lives at ?tab=projects
+// so either can be linked to.
+type Tab = 'experience' | 'projects'
+const TABS: Tab[] = ['experience', 'projects']
 const route = useRoute()
 const router = useRouter()
-const tab = computed<Tab>(() => (route.query.tab === 'experience' ? 'experience' : 'projects'))
+const tab = computed<Tab>(() => (route.query.tab === 'projects' ? 'projects' : 'experience'))
 function selectTab(next: Tab) {
-  router.replace({ query: next === 'projects' ? {} : { tab: next } })
+  router.replace({ query: next === 'experience' ? {} : { tab: next } })
 }
+
+// Slide direction follows tab order: moving right slides content in from the right, and vice versa.
+const direction = ref<'forward' | 'back'>('forward')
+watch(tab, (next, prev) => {
+  direction.value = TABS.indexOf(next) > TABS.indexOf(prev) ? 'forward' : 'back'
+  nextTick(moveIndicator)
+})
+
+// Underline that glides under the active tab
+const tabRefs = ref<Record<Tab, HTMLElement | null>>({ experience: null, projects: null })
+const indicator = ref({ left: 0, width: 0, ready: false })
+function moveIndicator() {
+  const el = tabRefs.value[tab.value]
+  if (!el) return
+  indicator.value = { left: el.offsetLeft, width: el.offsetWidth, ready: true }
+}
+onMounted(() => {
+  moveIndicator()
+  document.fonts?.ready.then(moveIndicator)
+  window.addEventListener('resize', moveIndicator)
+})
+onBeforeUnmount(() => window.removeEventListener('resize', moveIndicator))
 const firstYear = Math.min(...experiences.map((e) => Number(e.period.match(/\d{4}/)?.[0] ?? 9999)))
 
 const categories = ['All', 'Android', 'Open Source', 'Systems & Tools', 'Web & Tools'] as const
@@ -61,38 +85,30 @@ const filteredApps = computed(() => {
   <div>
     <header class="container page-head">
       <p class="label">Work</p>
-      <template v-if="tab === 'projects'">
+      <Transition :name="`slide-${direction}`" mode="out-in">
+      <div v-if="tab === 'projects'" key="projects">
         <h1>Apps in people’s pockets, and <em>code on GitHub.</em></h1>
         <p class="lede">
           The shipped apps range from statewide public-safety tools to apps with worldwide install bases, plus
           one personal tool for divers. The repositories are things I built to learn something properly, a few
           of them with an article attached.
         </p>
-      </template>
-      <template v-else>
+      </div>
+      <div v-else key="experience">
         <h1>Every role since <em>{{ firstYear }}.</em></h1>
         <p class="lede">
           Newest first. The same history fits on one page in the
           <a :href="profile.resumeUrl" class="link" target="_blank" rel="noopener">résumé (PDF)</a>.
         </p>
-      </template>
+      </div>
+      </Transition>
     </header>
 
     <div class="container">
       <div class="tabs" role="tablist" aria-label="Work">
         <button
-          id="tab-projects"
-          type="button"
-          role="tab"
-          class="tab"
-          :aria-selected="tab === 'projects'"
-          aria-controls="panel"
-          @click="selectTab('projects')"
-        >
-          Projects <span class="tab-count">{{ projects.length }}</span>
-        </button>
-        <button
           id="tab-experience"
+          :ref="(el) => (tabRefs.experience = el as HTMLElement)"
           type="button"
           role="tab"
           class="tab"
@@ -102,6 +118,24 @@ const filteredApps = computed(() => {
         >
           Experience <span class="tab-count">{{ experiences.length }}</span>
         </button>
+        <button
+          id="tab-projects"
+          :ref="(el) => (tabRefs.projects = el as HTMLElement)"
+          type="button"
+          role="tab"
+          class="tab"
+          :aria-selected="tab === 'projects'"
+          aria-controls="panel"
+          @click="selectTab('projects')"
+        >
+          Projects <span class="tab-count">{{ projects.length }}</span>
+        </button>
+        <span
+          class="tab-indicator"
+          :class="{ ready: indicator.ready }"
+          :style="{ transform: `translateX(${indicator.left}px)`, width: `${indicator.width}px` }"
+          aria-hidden="true"
+        />
       </div>
     </div>
 
@@ -111,7 +145,8 @@ const filteredApps = computed(() => {
       role="tabpanel"
       :aria-labelledby="tab === 'projects' ? 'tab-projects' : 'tab-experience'"
     >
-      <template v-if="tab === 'projects'">
+      <Transition :name="`slide-${direction}`" mode="out-in">
+      <div v-if="tab === 'projects'" key="projects">
         <div class="controls">
           <div class="filters" role="group" aria-label="Filter projects by category">
             <button
@@ -156,15 +191,17 @@ const filteredApps = computed(() => {
             Clear filters
           </button>
         </div>
-      </template>
+      </div>
 
-      <ExperienceList v-else />
+      <ExperienceList v-else key="experience" />
+      </Transition>
     </section>
   </div>
 </template>
 
 <style scoped>
 .tabs {
+  position: relative;
   display: flex;
   gap: 32px;
   border-bottom: 1px solid var(--rule-strong);
@@ -182,17 +219,38 @@ const filteredApps = computed(() => {
   transition: color var(--dur) var(--ease);
 }
 
-.tab::after {
-  content: '';
+.tab-indicator {
   position: absolute;
   left: 0;
-  right: 0;
   bottom: -1px;
   height: 2px;
   background: var(--accent);
-  transform: scaleX(0);
-  transform-origin: left;
-  transition: transform var(--dur) var(--ease);
+  opacity: 0;
+}
+
+.tab-indicator.ready {
+  opacity: 1;
+  transition: transform 520ms var(--ease), width 520ms var(--ease);
+}
+
+/* Content slides a short distance and fades; direction follows tab order */
+.slide-forward-enter-active,
+.slide-forward-leave-active,
+.slide-back-enter-active,
+.slide-back-leave-active {
+  transition: opacity 260ms var(--ease), transform 420ms var(--ease);
+}
+
+.slide-forward-enter-from,
+.slide-back-leave-to {
+  opacity: 0;
+  transform: translateX(32px);
+}
+
+.slide-forward-leave-to,
+.slide-back-enter-from {
+  opacity: 0;
+  transform: translateX(-32px);
 }
 
 .tab:hover {
@@ -201,10 +259,6 @@ const filteredApps = computed(() => {
 
 .tab[aria-selected='true'] {
   color: var(--ink);
-}
-
-.tab[aria-selected='true']::after {
-  transform: scaleX(1);
 }
 
 .tab-count {
