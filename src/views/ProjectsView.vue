@@ -50,9 +50,9 @@ const filteredApps = computed(() => {
       <p class="label">Work</p>
       <h1>Apps in people’s pockets, and <em>code on GitHub.</em></h1>
       <p class="lede">
-        The shipped apps run from statewide public-safety tools to an SDK platform on carrier phones, plus one
-        personal tool for divers. The repositories are things I built to learn something properly, a few of
-        them with an article attached.
+        The shipped apps range from statewide public-safety tools to apps with worldwide install bases, plus
+        one personal tool for divers. The repositories are things I built to learn something properly, a few
+        of them with an article attached.
       </p>
     </header>
 
